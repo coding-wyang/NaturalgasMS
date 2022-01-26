@@ -1,7 +1,5 @@
-import http from "./index.js";
+import http from './index';
 /* 登录信息 */
-export const loginGet = (data) => {
-  return http.get("/user/login", {
-    data: data,
-  });
-};
+export const loginGet = (data) => http.get('/user/login', {
+  data,
+});
