@@ -7,6 +7,7 @@ import viteSvgIcons from 'vite-plugin-svg-icons';
 import path, { resolve } from 'path';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import eslintPlugin from 'vite-plugin-eslint';
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [

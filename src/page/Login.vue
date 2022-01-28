@@ -7,8 +7,8 @@ import { loginGet } from '../http/api';
 const router = useRouter();
 
 const loginForm = reactive({
-  user: '',
-  pass: '',
+  user: '04183177',
+  pass: 'xu04183177',
 });
 
 const getLogin = () => {
@@ -16,8 +16,11 @@ const getLogin = () => {
     userName: loginForm.user,
     passWord: loginForm.pass,
   }).then((res) => {
+    console.log(res);
     if (res.status === 200) {
-      router.push('/home');
+      router.push('/Home');
+      sessionStorage.setItem('userName', loginForm.user);
+      sessionStorage.setItem('userToken', res.token);
     } else {
       ElMessage.error('登录失败');
     }

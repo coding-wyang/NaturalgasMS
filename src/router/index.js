@@ -21,4 +21,11 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  if (to.path === '/Login') return next();
+  const isLogin = sessionStorage.getItem('userToken');
+  if (!isLogin) return next('/Login');
+  return next();
+});
+
 export default router;

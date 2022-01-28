@@ -2,14 +2,14 @@ import { createStore } from 'vuex';
 
 const store = createStore({
   state: {
-    todos: [
-      { id: 1, title: '...', done: true },
-    ],
+    currentUser: null, // 当前用户
+    isLogin: false, // 用户是否已经登陆
+    token: '', // 保存用户登录的token
   },
   getters: {
-    doneTodos(state) {
-      return state.todos.filter((todo) => todo.done);
-    },
+  },
+  mutations: {
+
   },
 });
 
