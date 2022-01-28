@@ -3,7 +3,5 @@
 </script>
 
 <template>
-<div>
-monitor
-</div>
+  <div>manager</div>
 </template>
