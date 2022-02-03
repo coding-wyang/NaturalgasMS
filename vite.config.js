@@ -28,7 +28,7 @@ export default defineConfig({
     }),
   ],
   server: {
-    host: '192.168.0.105',
+    host: '192.168.0.104',
     port: 8900,
     // 是否开启 https
     https: false,

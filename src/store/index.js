@@ -9,8 +9,7 @@ const store = createStore({
   getters: {
   },
   mutations: {
-
+    setCurrentUser: (state, data) => { state.currentUser = data; },
   },
 });
-
 export default store;

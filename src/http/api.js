@@ -3,3 +3,7 @@ import http from './index';
 export const loginGet = (data) => http.get('/user/login', {
   data,
 });
+
+export const monitorGet = (data) => http.get('/monitor', {
+  data,
+});

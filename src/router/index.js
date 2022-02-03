@@ -21,6 +21,10 @@ const router = createRouter({
   routes,
 });
 
+export const dynamicRouter = [
+  { path: '/Home', name: 'Home', component: () => import('../page/Home.vue') },
+];
+
 router.beforeEach((to, from, next) => {
   if (to.path === '/Login') return next();
   const isLogin = sessionStorage.getItem('userToken');
