@@ -1,10 +1,21 @@
 <script setup>
 import { onMounted, reactive } from 'vue';
-import { monitorGet } from '../../http/api';
+import { monitorGet, gasGet } from '../../http/api';
 
 onMounted(() => {
   gasInfoGet();
+  gasMockGet();
 });
+
+const gasMockGet = () => {
+  gasGet().then((res) => {
+    res.json().then((data) => {
+      console.log(data);
+    });
+  }).catch((err) => {
+    console.log(err);
+  });
+};
 
 const gasInfo = reactive([
   { name: '酸碱度', value: Number }, // 酸碱度

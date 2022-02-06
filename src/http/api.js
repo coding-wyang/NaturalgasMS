@@ -7,3 +7,5 @@ export const loginGet = (data) => http.get('/user/login', {
 export const monitorGet = (data) => http.get('/monitor', {
   data,
 });
+
+export const gasGet = () => fetch('/api/gasGet');

@@ -27,13 +27,12 @@ export default defineConfig({
       cache: false,
     }),
     viteMockServe({
-      supportTs: false,
       mockPath: 'src/mock',
-      localEnabled: true,
+      supportTs: false,
     }),
   ],
   server: {
-    host: '192.168.0.105',
+    host: '127.0.0.1',
     port: 8900,
     // 是否开启 https
     https: false,
