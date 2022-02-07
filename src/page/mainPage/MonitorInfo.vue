@@ -1,22 +1,31 @@
 <script setup>
 import { onMounted, reactive } from 'vue';
-import { monitorGet, gasGet } from '../../http/api';
+import { monitorPost, gasGet } from '../../http/api';
 
 onMounted(() => {
-  gasInfoGet();
+  /* gasInfoGet(); */
   gasMockGet();
 });
 
 const gasMockGet = () => {
   gasGet().then((res) => {
-    res.json().then((data) => {
-      console.log(data);
+    res.json().then(({ data }) => {
+      /* updateSave.splice(0, 1, { data }); */
+      console.log('data', data);
+      gasInfo[0].value = data.PH;
+      gasInfo[1].value = data.Calorificvalue;
+      gasInfo[2].value = data.wdp;
+      gasInfo[3].value = data.hdp;
+      gasInfo[4].value = data.methane;
+      gasInfo[5].value = data.sulfur;
+      monitorPost(data).then((ret) => {
+        console.log('postres:::', ret);
+      });
     });
   }).catch((err) => {
     console.log(err);
   });
 };
-
 const gasInfo = reactive([
   { name: '酸碱度', value: Number }, // 酸碱度
   { name: '发热值', value: Number }, // 发热值
@@ -36,17 +45,6 @@ const iconSave = reactive([
 ]);
 /* 获取监测信息 */
 
-const gasInfoGet = () => {
-  monitorGet().then(({ data: res }) => {
-    gasInfo[0].value = res.gasInfo.PH;
-    gasInfo[1].value = res.gasInfo.Calorificvalue;
-    gasInfo[2].value = res.gasInfo.wdp;
-    gasInfo[3].value = res.gasInfo.hdp;
-    gasInfo[4].value = res.gasInfo.methane;
-    gasInfo[5].value = res.gasInfo.sulfur;
-  });
-  console.log(gasInfo);
-};
 </script>
 
 <template>

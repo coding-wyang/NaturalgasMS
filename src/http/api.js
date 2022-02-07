@@ -4,7 +4,7 @@ export const loginGet = (data) => http.get('/user/login', {
   data,
 });
 
-export const monitorGet = (data) => http.get('/monitor', {
+export const monitorPost = (data) => http.get('/monitor', {
   data,
 });
 
