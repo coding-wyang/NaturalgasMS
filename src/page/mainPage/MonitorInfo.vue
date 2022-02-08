@@ -35,6 +35,10 @@ const gasInfo = reactive([
   { name: '总硫', value: Number }, //  总硫
 ]);
 
+const equipment = reactive([
+  { name: '设备总数', value: 26 }, // 设备总数
+]);
+
 const iconSave = reactive([
   'fangkuai',
   'xiaohua',
@@ -55,6 +59,15 @@ const iconSave = reactive([
     <el-divider style="margin-block: 10px;"></el-divider>
     <div class="cardinfo-box">
       <div class="cardinfo" v-for="(item, index) in gasInfo" :key='item.index' >
+        <svg-icon class="card-icon" :name="iconSave[index]"/>
+        <p>{{item.value}}</p>
+        <p>{{item.name}}</p>
+      </div>
+    </div>
+    <h5>统计指标</h5>
+    <el-divider style="margin-block: 10px;"></el-divider>
+    <div class="statistical-box">
+      <div class="statistical" v-for="(item, index) in equipment" :key="item.index">
         <svg-icon class="card-icon" :name="iconSave[index]"/>
         <p>{{item.value}}</p>
         <p>{{item.name}}</p>
@@ -82,7 +95,7 @@ const iconSave = reactive([
   margin-block: 10px;
   margin-inline: 14px;
 }
-.cardinfo .card-icon{
+.card-icon{
   padding: 7px;
   width: 40px;
   height: 40px;
@@ -97,6 +110,33 @@ const iconSave = reactive([
   margin-inline-end: 5px;
 }
 .cardinfo>:nth-child(3){
+  display: flex;
+  color: aliceblue;
+  justify-content: end;
+  margin-inline-end: 7px;
+}
+.statistical-box{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+.statistical{
+  background-color: #627df5;
+  width: 200px;
+  height: 80px;
+  border-radius: 5px;
+  margin-block: 10px;
+  margin-inline: 14px;
+}
+.statistical>:nth-child(2){
+  color: aliceblue;
+  font-size: 1.7em;
+  display: flex;
+  justify-content: end;
+  margin-block-start: -50px;
+  margin-inline-end: 5px;
+}
+.statistical>:nth-child(3){
   display: flex;
   color: aliceblue;
   justify-content: end;
