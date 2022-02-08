@@ -3,3 +3,9 @@ import http from './index';
 export const loginGet = (data) => http.get('/user/login', {
   data,
 });
+
+export const monitorPost = (data) => http.get('/monitor', {
+  data,
+});
+
+export const gasGet = () => fetch('/api/gasGet');

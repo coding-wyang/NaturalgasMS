@@ -7,7 +7,7 @@ import viteSvgIcons from 'vite-plugin-svg-icons';
 import path, { resolve } from 'path';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import eslintPlugin from 'vite-plugin-eslint';
-
+import { viteMockServe } from 'vite-plugin-mock';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -26,9 +26,13 @@ export default defineConfig({
     eslintPlugin({
       cache: false,
     }),
+    viteMockServe({
+      mockPath: 'src/mock',
+      supportTs: false,
+    }),
   ],
   server: {
-    host: '192.168.0.105',
+    host: '127.0.0.1',
     port: 8900,
     // 是否开启 https
     https: false,

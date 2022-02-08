@@ -1,7 +1,10 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useStore } from 'vuex';
 import MonitorInfo from './mainPage/MonitorInfo.vue';
+import U from '../utils/index';
 
+const store = useStore();
 const editableTabsValue = ref('0');// 控制tab高亮显示
 const editableTabs = ref([
   { title: '监测信息', name: '0' },
@@ -9,11 +12,29 @@ const editableTabs = ref([
 let tabIndex = 0;
 const showTab = ref('监测信息'); // 控制main页面显示tab对应的内容
 
-const asideList = ref([
-  '监测信息',
-  '用户管理',
-  '缴费业务',
-]);
+onMounted(() => {
+  U.sessionSave(store);
+});
+const userType = computed(() => store.state.currentUser);
+
+const asideList = ref(
+  {
+    /* 管理员 */
+    managerList:
+  [
+    '监测信息',
+    '用户管理',
+    '缴费管理',
+  ],
+  },
+  {
+    /* 用户 */
+    userList:
+    [
+      '缴费业务',
+    ],
+  },
+);
 /* 增加tab */
 function addTableTab(e) {
   showTab.value = e;
@@ -72,21 +93,30 @@ const changeTab = (eve) => {
   <el-container>
       <el-aside width="100px">
         <div class="aside-box">
-          <ul class="ul-box">
+          <!-- 管理员侧边栏 -->
+          <ul class="ul-box" v-if="userType ==='0'">
             <li>
-              <div class="icon-monito" @click='addTableTab(asideList[0])'>
+              <div class="icon-monito" @click='addTableTab(asideList.managerList[0])'>
                 <svg-icon class="aside-icon" name="monitor"/>
               </div>
                 <p>监测信息</p>
             </li>
             <li>
-              <div class="icon-manager" @click='addTableTab(asideList[1])'>
+              <div class="icon-manager" @click='addTableTab(asideList.managerList[1])'>
                 <svg-icon class="aside-icon" name="star"/>
               </div>
               <p>用户管理</p>
             </li>
             <li>
-              <div class="icon-pay" @click='addTableTab(asideList[2])'>
+              <div class="icon-pay" @click='addTableTab(asideList.managerList[2])'>
+                <svg-icon class="aside-icon" name="diamond"/>
+              </div >
+              <p>缴费管理</p>
+            </li>
+          </ul>
+          <ul class="ul-box" v-if="userType ==='1'">
+            <li>
+              <div class="icon-pay" @click='addTableTab(asideList.userList[0])'>
                 <svg-icon class="aside-icon" name="diamond"/>
               </div >
               <p>缴费业务</p>
@@ -118,7 +148,7 @@ const changeTab = (eve) => {
             </el-tab-pane>
           </el-tabs>
           <!-- 监测信息 -->
-          <monitor-info v-show="showTab === asideList[0]"></monitor-info>
+          <monitor-info v-show="showTab === asideList.managerList[0]"></monitor-info>
         </el-main>
       </el-container>
     </el-container>

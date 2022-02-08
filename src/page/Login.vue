@@ -1,9 +1,11 @@
 <script setup>
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import { ElMessage } from 'element-plus';
 import { loginGet } from '../http/api';
 
+const store = useStore();
 const router = useRouter();
 
 const loginForm = reactive({
@@ -18,6 +20,7 @@ const getLogin = () => {
   }).then((res) => {
     console.log(res);
     if (res.status === 200) {
+      store.commit('setCurrentUser', res.type);
       router.push('/Home');
       sessionStorage.setItem('userName', loginForm.user);
       sessionStorage.setItem('userToken', res.token);
