@@ -1,0 +1,229 @@
+<script setup>
+import {
+  onMounted, reactive, ref, computed,
+} from 'vue';
+import { userInfoGet } from '../../http/api';
+
+onMounted(() => {
+  userGet();
+});
+/* 用户信息模板 */
+const userInfo = reactive([
+  { name: '用户总数', value: Number },
+  { name: '正常用户数量', value: Number },
+  { name: '欠费用户数量', value: Number },
+]);
+
+const userList = reactive({
+  tableData: [
+  ],
+});
+
+const search = ref('');
+const filterTableData = computed(() => userList.tableData.filter(
+  (data) => !search.value
+      || data.username.toLowerCase().includes(search.value.toLowerCase()),
+));
+
+const dialogVisible = ref(false);
+
+const handleEdit = (index, row) => {
+  console.log(index, row);
+  dialogVisible.value = true;
+  console.log(dialogVisible.value);
+};
+/* 获取用户信息 */
+const userGet = () => {
+  userInfoGet().then((res) => {
+    userInfo[0].value = res.data.count;
+    userInfo[1].value = res.data.normalCount;
+    userInfo[2].value = res.data.arrearsCount;
+    userList.tableData = res.userlist;
+    console.log('ss', userList.tableData);
+  });
+};
+
+</script>
+
+<template>
+  <div class="manager-box">
+    <el-card>
+      <div class="userinfo-box">
+        <!-- 用户数量卡片 -->
+        <div class="user-count">
+          <div>
+            <svg-icon name='star'></svg-icon>
+            <h4>用户信息</h4>
+            </div>
+            <div>
+            <p>{{userInfo[0].value}}</p>
+            <span>用户数</span>
+          </div>
+          <div>
+            <p>{{userInfo[1].value}}</p>
+            <span>正常</span>
+          </div>
+          <div>
+            <p>{{userInfo[2].value}}</p>
+            <span>欠费</span>
+          </div>
+      </div>
+      <div class="account-info">
+        <div>
+          <svg-icon name='diamond'></svg-icon>
+          <h4>账户信息</h4>
+        </div>
+        <div>
+          <p>元</p>
+          <span>累计扣款</span>
+        </div>
+        <div>
+          <p>元</p>
+          <span>累计缴费</span>
+        </div>
+        <div>
+          <p>元</p>
+          <span>余额</span>
+        </div>
+      </div>
+      </div>
+      <div class="user-list-box">
+        <h4>账号查询</h4>
+        <el-table :data="filterTableData" style="width: 100%; background-color: rgb(248, 248, 248);">
+          <el-table-column label="账号" width="180">
+            <template #default="scope">
+              <div style="display: flex; align-items: center">
+                <el-icon><timer /></el-icon>
+                <span style="margin-inline-start: -15px">{{ scope.row.username }}</span>
+                </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="账号等级" width="180">
+                  <template #default="scope">
+                    <span> {{ scope.row.type }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="Operations">
+                    <template #header>
+        <el-input v-model="search" size="small" placeholder="Type to search" />
+      </template>
+                      <template #default="scope">
+                        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+                        <el-button
+                        size="small"
+                        type="danger"
+                        @click="handleDelete(scope.$index, scope.row)"
+                        >Delete</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-dialog
+                v-model="dialogVisible"
+                title="Tips"
+                width="30%"
+                :before-close="handleClose"
+                >
+                <span>This is a message</span>
+                <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >确认</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
+        </div>
+    </el-card>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.userinfo-box{
+  display: flex;
+  justify-content: start;
+}
+.user-count{
+  display: flex;
+  flex-wrap: wrap;
+  background-color: rgb(250, 250, 250);
+  width: 300px;
+  height: 200px;
+  border-radius: 7px;
+  margin-block: 10px;
+  margin-inline: 14px;
+}
+/* svg 及用户信息上半部分的盒子 */
+.user-count >:nth-child(1){
+  width: 300px;
+  display: flex;
+  justify-content: center;
+  margin-block-start: 25px;
+  border-bottom: solid 1px rgb(255, 255, 255);
+}
+
+/* 用户数 正常 及欠费 */
+.user-count >:nth-child(2){
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 109px;
+  border-inline-end: solid 1px #ffff;
+}
+.user-count >:nth-child(3){
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 94px;
+    border-inline-end: solid 1px #ffff;
+}
+.user-count >:nth-child(4){
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  width: 93px;
+}
+.user-count>div>p{
+  font-size: 35px;
+}
+/* svg */
+.user-count >:nth-child(1)>:nth-child(1){
+  color: #96c24e;
+  font-size: 2.2em;
+  margin-inline: 30px;
+  margin-inline-start: -85px;
+}
+/* 用户信息h4 */
+.user-count >:nth-child(1)>h4{
+  font-size: 25px;
+  margin-block-start: px;
+}
+
+.account-info{
+  display: flex;
+  flex-wrap: wrap;
+  background-color: rgb(250, 250, 250);
+  width: 300px;
+  height: 200px;
+  border-radius: 7px;
+  margin-block: 10px;
+  margin-inline: 14px;
+}
+
+.user-list-box{
+  background-color: rgb(252, 252, 252);
+  width: 100%;
+  height: 320px;
+  border-radius: 7px;
+  margin-block: 10px;
+  margin-inline: 14px;
+}
+/* .user-List-box>ul{
+  height: 300px;
+} */
+
+</style>
