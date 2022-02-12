@@ -12,4 +12,12 @@ export const monitorPost = (data) => http.get('/monitor', {
   data,
 });
 
+export const userUpdate = (data) => http.get('/user/update', {
+  data,
+});
+
+export const userDelete = (data) => http.get('/user/delete', {
+  data,
+});
+
 export const gasGet = () => fetch('/api/gasGet');

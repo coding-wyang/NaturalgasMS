@@ -2,7 +2,7 @@
 import {
   onMounted, reactive, ref, computed,
 } from 'vue';
-import { userInfoGet } from '../../http/api';
+import { userInfoGet, userUpdate, userDelete } from '../../http/api';
 
 onMounted(() => {
   userGet();
@@ -24,13 +24,23 @@ const filterTableData = computed(() => userList.tableData.filter(
   (data) => !search.value
       || data.username.toLowerCase().includes(search.value.toLowerCase()),
 ));
-
+/* 修改会话 */
 const dialogVisible = ref(false);
+/* 当前选中的列表index */
+const tableIndex = ref(0);
 
+/* 修改 参数为选中的table信息 以及index */
 const handleEdit = (index, row) => {
-  console.log(index, row);
-  dialogVisible.value = true;
-  console.log(dialogVisible.value);
+  tableIndex.value = index;// 保存index信息
+  dialogVisible.value = true; // 打开会话
+  value.value = row.type; // 切换value的会话默认值
+};
+
+const handleDelete = (row) => {
+  userDelete(row).then((res) => {
+    console.log('delete::', res);
+  });
+  console.log(row);
 };
 /* 获取用户信息 */
 const userGet = () => {
@@ -40,6 +50,35 @@ const userGet = () => {
     userInfo[2].value = res.data.arrearsCount;
     userList.tableData = res.userlist;
     console.log('ss', userList.tableData);
+  });
+};
+/* 选择器的值 */
+const value = ref('');
+
+/* 账号权限可选列表 */
+const options = [
+  {
+    value: '0',
+    label: '0',
+  },
+  {
+    value: '1',
+    label: '1',
+  },
+  {
+    value: '2',
+    label: '2',
+  },
+];
+/* 选择器 value值改变时 改变权限 */
+const typeChange = (val) => {
+  userList.tableData[tableIndex.value].type = val;
+};
+/* 更新用户数据 */
+const updateData = () => {
+  dialogVisible.value = false;
+  userUpdate(userList.tableData[tableIndex.value]).then((res) => {
+    console.log('updata::', res);
   });
 };
 
@@ -112,24 +151,33 @@ const userGet = () => {
                         <el-button
                         size="small"
                         type="danger"
-                        @click="handleDelete(scope.$index, scope.row)"
+                        @click="handleDelete( scope.row)"
                         >Delete</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <el-dialog
                 v-model="dialogVisible"
-                title="Tips"
-                width="30%"
+                title="账号信息"
+                width="40%"
                 :before-close="handleClose"
                 >
-                <span>This is a message</span>
+                <span>账号</span>
+                <el-input v-model="userList.tableData[tableIndex].username" type="text" style="width:210px;"/>
+                <span>账号权限</span>
+                <el-select v-model="value" class="m-2" placeholder="Select" size="small" @change="typeChange">
+                  <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                  >
+                </el-option>
+              </el-select>
                 <template #footer>
-      <span class="dialog-footer">
+              <span class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
-          >确认</el-button
-        >
+        <el-button type="primary" @click="updateData">确认</el-button>
       </span>
     </template>
   </el-dialog>
