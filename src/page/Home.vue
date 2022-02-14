@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import MonitorInfo from './mainPage/MonitorInfo.vue';
+import UserManager from './mainPage/UserManager.vue';
 import U from '../utils/index';
 
 const store = useStore();
@@ -149,6 +150,8 @@ const changeTab = (eve) => {
           </el-tabs>
           <!-- 监测信息 -->
           <monitor-info v-show="showTab === asideList.managerList[0]"></monitor-info>
+          <!-- 用户管理 -->
+          <user-manager v-show="showTab === asideList.managerList[1]"></user-manager>
         </el-main>
       </el-container>
     </el-container>
