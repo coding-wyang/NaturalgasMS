@@ -2,6 +2,7 @@
 import {
   onMounted, reactive, ref, computed,
 } from 'vue';
+import { ElMessageBox } from 'element-plus';
 import { userInfoGet, userUpdate, userDelete } from '../../http/api';
 
 onMounted(() => {
@@ -37,8 +38,14 @@ const handleEdit = (index, row) => {
 };
 
 const handleDelete = (row) => {
-  userDelete(row).then((res) => {
-    console.log('delete::', res);
+  ElMessageBox.confirm('此操作将永久删除该账号，是否继续？', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).then(() => {
+    userDelete(row).then((res) => {
+      console.log('delete::', res);
+    });
   });
   console.log(row);
 };
@@ -186,7 +193,7 @@ const updateData = () => {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .userinfo-box{
   display: flex;
   justify-content: start;
@@ -225,7 +232,7 @@ const updateData = () => {
   justify-content: center;
   align-items: center;
   width: 94px;
-    border-inline-end: solid 1px #ffff;
+  border-inline-end: solid 1px #ffff;
 }
 .user-count >:nth-child(4){
   display: flex;
@@ -248,7 +255,6 @@ const updateData = () => {
 /* 用户信息h4 */
 .user-count >:nth-child(1)>h4{
   font-size: 25px;
-  margin-block-start: px;
 }
 
 .account-info{
@@ -273,5 +279,25 @@ const updateData = () => {
 /* .user-List-box>ul{
   height: 300px;
 } */
+.el-overlay{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.el-message-box{
+  width: 300px;
+  height: 130px;
+  border-radius: 5px;
+  background: #ffff;
+  color: #db984c;
+}
+.el-message-box__container{
+  display: flex;
+  padding-block: 20px;
+}
+.el-message-box__btns{
+  position: relative;
+  left: 90px;
+}
 
 </style>
