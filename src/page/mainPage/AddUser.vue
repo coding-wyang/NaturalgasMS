@@ -1,0 +1,74 @@
+<script setup>
+import { reactive, ref } from 'vue';
+import { userAdd } from '../../http/api';
+
+const addForm = reactive({
+  user: '',
+  pass: '',
+  type: '',
+});
+
+const rules = reactive({
+  user: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+  pass: [{ required: true, message: '请输入密码', trigger: 'blur' },
+    {
+      min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur',
+    }],
+});
+
+const value = ref('');
+const options = [
+  {
+    value: '0',
+    label: '0',
+  },
+  {
+    value: '1',
+    label: '1',
+  },
+  {
+    value: '2',
+    label: '2',
+  },
+];
+
+const typeChange = (val) => {
+  addForm.type = val;
+};
+
+const addUser = () => {
+  userAdd(addForm).then((res) => {
+    console.log('adduser:::', res);
+  });
+};
+</script>
+
+<template>
+  <el-card>
+    <div class="add-user">
+      <h4>添加用户</h4>
+      <el-form label-width="90px" :model="addForm" :rules="rules" ref="ruleFormRef"  style="width: 250px;">
+          <el-form-item label="账号" prop="user" >
+            <el-input v-model="addForm.user" />
+          </el-form-item>
+          <el-form-item label="密码" prop="pass" >
+            <el-input v-model="addForm.pass"/>
+          </el-form-item>
+          <el-form-item label="账号权限" prop="type" >
+            <el-select v-model="value" placeholder="请选择账号类型" size="normal" @change="typeChange">
+                  <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                  >
+                </el-option>
+              </el-select>
+          </el-form-item>
+          <div class="login-button">
+            <el-button  type="primary" style="width:150px;" @click="addUser">确认添加</el-button>
+          </div>
+        </el-form>
+    </div>
+  </el-card>
+</template>

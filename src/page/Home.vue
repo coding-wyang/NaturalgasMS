@@ -1,8 +1,11 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import {
+  ref, computed, onMounted,
+} from 'vue';
 import { useStore } from 'vuex';
 import MonitorInfo from './mainPage/MonitorInfo.vue';
 import UserManager from './mainPage/UserManager.vue';
+import AddUser from './mainPage/AddUser.vue';
 import U from '../utils/index';
 
 const store = useStore();
@@ -84,6 +87,12 @@ const removeTab = (targetName) => {
   }
 };
 
+/* 处理el—dropdown-item */
+const handleCommand = (val) => {
+  console.log('ifssLL:::', val);
+  addTableTab(val);
+};
+
 const changeTab = (eve) => {
   /* 通过tab标签 控制main页面切换 */
   showTab.value = eve.target.innerText;
@@ -103,9 +112,17 @@ const changeTab = (eve) => {
                 <p>监测信息</p>
             </li>
             <li>
+              <el-dropdown @command="handleCommand($event)" placement="bottom-end" size="small">
               <div class="icon-manager" @click='addTableTab(asideList.managerList[1])'>
                 <svg-icon class="aside-icon" name="star"/>
               </div>
+              <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command='用户管理'>用户管理</el-dropdown-item>
+                    <el-dropdown-item command='添加用户'>添加用户</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
               <p>用户管理</p>
             </li>
             <li>
@@ -117,9 +134,9 @@ const changeTab = (eve) => {
           </ul>
           <ul class="ul-box" v-if="userType ==='1'">
             <li>
-              <div class="icon-pay" @click='addTableTab(asideList.userList[0])'>
-                <svg-icon class="aside-icon" name="diamond"/>
-              </div >
+                <div class="icon-pay" @click='addTableTab(asideList.userList[0])'>
+                  <svg-icon class="aside-icon" name="diamond"/>
+                </div >
               <p>缴费业务</p>
             </li>
           </ul>
@@ -152,6 +169,8 @@ const changeTab = (eve) => {
           <monitor-info v-show="showTab === asideList.managerList[0]"></monitor-info>
           <!-- 用户管理 -->
           <user-manager v-show="showTab === asideList.managerList[1]"></user-manager>
+          <!-- 添加用户 -->
+          <add-user v-show="showTab ==='添加用户'"></add-user>
         </el-main>
       </el-container>
     </el-container>
@@ -167,6 +186,16 @@ body{
 #app .el-container{
   height: 100%;
 }
+.el-dropdown__popper{
+  left: 90px !important;
+  top: 176px !important;
+}
+.el-popper__arrow{
+  left: -5px !important;
+  top: 10px !important;
+  transform: rotate(90deg) !important;
+}
+
 .el-aside{
   background: #2d2e36;
 }

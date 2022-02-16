@@ -172,7 +172,7 @@ const updateData = () => {
                 <span>账号</span>
                 <el-input v-model="userList.tableData[tableIndex].username" type="text" style="width:210px;"/>
                 <span>账号权限</span>
-                <el-select v-model="value" class="m-2" placeholder="Select" size="small" @change="typeChange">
+                <el-select v-model="value" placeholder="Select" size="small" @change="typeChange">
                   <el-option
                   v-for="item in options"
                   :key="item.value"
@@ -201,12 +201,13 @@ const updateData = () => {
 .user-count{
   display: flex;
   flex-wrap: wrap;
-  background-color: rgb(250, 250, 250);
+  background-color: rgb(255, 255, 255);
   width: 300px;
   height: 200px;
   border-radius: 7px;
   margin-block: 10px;
   margin-inline: 14px;
+  box-shadow: 5px 5px 5px rgb(236, 236, 236), -5px -5px 5px rgb(233, 233, 233),-5px 5px 5px rgb(235, 235, 235), 5px -5px 5px rgb(236, 236, 236);
 }
 /* svg 及用户信息上半部分的盒子 */
 .user-count >:nth-child(1){
@@ -214,7 +215,7 @@ const updateData = () => {
   display: flex;
   justify-content: center;
   margin-block-start: 25px;
-  border-bottom: solid 1px rgb(255, 255, 255);
+  border-bottom: solid 1px rgb(233, 233, 233);
 }
 
 /* 用户数 正常 及欠费 */
@@ -224,7 +225,7 @@ const updateData = () => {
   justify-content: center;
   align-items: center;
   width: 109px;
-  border-inline-end: solid 1px #ffff;
+  border-inline-end: solid 1px rgb(233, 233, 233);
 }
 .user-count >:nth-child(3){
   display: flex;
@@ -232,7 +233,7 @@ const updateData = () => {
   justify-content: center;
   align-items: center;
   width: 94px;
-  border-inline-end: solid 1px #ffff;
+  border-inline-end: solid 1px rgb(236, 236, 236);
 }
 .user-count >:nth-child(4){
   display: flex;
@@ -260,12 +261,13 @@ const updateData = () => {
 .account-info{
   display: flex;
   flex-wrap: wrap;
-  background-color: rgb(250, 250, 250);
+  background-color: rgb(255, 255, 255);
   width: 300px;
   height: 200px;
   border-radius: 7px;
   margin-block: 10px;
   margin-inline: 14px;
+  box-shadow: 5px 5px 5px rgb(236, 236, 236), -5px -5px 5px rgb(233, 233, 233),-5px 5px 5px rgb(235, 235, 235), 5px -5px 5px rgb(236, 236, 236);
 }
 
 .user-list-box{
@@ -275,6 +277,7 @@ const updateData = () => {
   border-radius: 7px;
   margin-block: 10px;
   margin-inline: 14px;
+
 }
 /* .user-List-box>ul{
   height: 300px;
