@@ -20,4 +20,8 @@ export const userDelete = (data) => http.get('/user/delete', {
   data,
 });
 
+export const userAdd = (data) => http.get('/user/add', {
+  data,
+});
+
 export const gasGet = () => fetch('/api/gasGet');
