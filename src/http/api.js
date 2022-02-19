@@ -24,4 +24,8 @@ export const userAdd = (data) => http.get('/user/add', {
   data,
 });
 
+export const gascardGet = (data) => http.get('/gascard', {
+  data,
+});
+
 export const gasGet = () => fetch('/api/gasGet');

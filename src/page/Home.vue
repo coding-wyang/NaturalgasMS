@@ -6,6 +6,8 @@ import { useStore } from 'vuex';
 import MonitorInfo from './mainPage/MonitorInfo.vue';
 import UserManager from './mainPage/UserManager.vue';
 import AddUser from './mainPage/AddUser.vue';
+import GasManager from './mainPage/GasManager.vue';
+import CardManager from './mainPage/CardManager.vue';
 import U from '../utils/index';
 
 const store = useStore();
@@ -18,6 +20,7 @@ const showTab = ref('监测信息'); // 控制main页面显示tab对应的内容
 
 onMounted(() => {
   U.sessionSave(store);
+  console.log(showTab);
 });
 const userType = computed(() => store.state.currentUser);
 
@@ -28,7 +31,9 @@ const asideList = ref(
   [
     '监测信息',
     '用户管理',
+    '燃气管理',
     '缴费管理',
+    '气卡管理',
   ],
   },
   {
@@ -41,6 +46,7 @@ const asideList = ref(
 );
 /* 增加tab */
 function addTableTab(e) {
+  console.log(e);
   showTab.value = e;
   const isExsit = editableTabs.value.find((value) => value.title === e);
   /* 通过Array.find 确认该标签是否存在 */
@@ -126,10 +132,22 @@ const changeTab = (eve) => {
               <p>用户管理</p>
             </li>
             <li>
-              <div class="icon-pay" @click='addTableTab(asideList.managerList[2])'>
+              <div class="icon-fire" @click='addTableTab(asideList.managerList[2])'>
+                <svg-icon class="aside-icon" name="gas"/>
+              </div >
+              <p>燃气管理</p>
+            </li>
+            <li>
+              <div class="icon-pay" @click='addTableTab(asideList.managerList[3])'>
                 <svg-icon class="aside-icon" name="diamond"/>
               </div >
               <p>缴费管理</p>
+            </li>
+            <li>
+              <div class="icon-slid" @click='addTableTab(asideList.managerList[4])'>
+                <svg-icon class="aside-icon" name="sliders"/>
+              </div >
+              <p>气卡管理</p>
             </li>
           </ul>
           <ul class="ul-box" v-if="userType ==='1'">
@@ -171,6 +189,10 @@ const changeTab = (eve) => {
           <user-manager v-show="showTab === asideList.managerList[1]"></user-manager>
           <!-- 添加用户 -->
           <add-user v-show="showTab ==='添加用户'"></add-user>
+          <!-- 燃气管理 -->
+          <gas-manager v-show ="showTab===asideList.managerList[2]"></gas-manager>
+          <!-- 气卡管理 -->
+          <card-manager v-show ="showTab===asideList.managerList[4]"> </card-manager>
         </el-main>
       </el-container>
     </el-container>
@@ -219,7 +241,7 @@ body{
   height: 50px;
   width: 50px;
   border-radius:8px;
-  background: #10aec2;
+  background: #5b63d6;
 }
 .icon-manager{
   margin: 0 auto;
@@ -228,12 +250,27 @@ body{
   border-radius: 7px;
   background: #c6e6e8;
 }
+.icon-fire{
+  margin: 0 auto;
+  height: 50px;
+  width: 50px;
+  border-radius: 5px;
+  background: #87a0cf;
+}
 .icon-pay{
   margin: 0 auto;
   height: 50px;
   width: 50px;
   border-radius: 5px;
   background: #b2cf87;
+}
+
+.icon-slid{
+  margin: 0 auto;
+  height: 50px;
+  width: 50px;
+  border-radius: 5px;
+  background: #cf87bf;
 }
 
 .ul-box >li>p{
