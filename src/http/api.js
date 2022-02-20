@@ -28,4 +28,8 @@ export const gascardGet = (data) => http.get('/gascard', {
   data,
 });
 
+export const cardQuery = (data) => http.get('/gascard/query', {
+  data,
+});
+
 export const gasGet = () => fetch('/api/gasGet');

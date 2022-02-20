@@ -8,6 +8,7 @@ import UserManager from './mainPage/UserManager.vue';
 import AddUser from './mainPage/AddUser.vue';
 import GasManager from './mainPage/GasManager.vue';
 import CardManager from './mainPage/CardManager.vue';
+import QueryCard from './mainPage/QueryCard.vue';
 import U from '../utils/index';
 
 const store = useStore();
@@ -144,9 +145,17 @@ const changeTab = (eve) => {
               <p>缴费管理</p>
             </li>
             <li>
+              <el-dropdown  @command="handleCommand($event)" placement="bottom-end" size="small">
               <div class="icon-slid" @click='addTableTab(asideList.managerList[4])'>
                 <svg-icon class="aside-icon" name="sliders"/>
               </div >
+              <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command='气卡管理'>气卡管理</el-dropdown-item>
+                    <el-dropdown-item command='查询气卡'>查询气卡</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
               <p>气卡管理</p>
             </li>
           </ul>
@@ -193,6 +202,8 @@ const changeTab = (eve) => {
           <gas-manager v-show ="showTab===asideList.managerList[2]"></gas-manager>
           <!-- 气卡管理 -->
           <card-manager v-show ="showTab===asideList.managerList[4]"> </card-manager>
+          <!-- 查询气卡 -->
+          <query-card v-show="showTab ==='查询气卡'"></query-card>
         </el-main>
       </el-container>
     </el-container>
@@ -209,8 +220,8 @@ body{
   height: 100%;
 }
 .el-dropdown__popper{
-  left: 90px !important;
-  top: 176px !important;
+  left: 140px !important;
+  margin: -50px !important;
 }
 .el-popper__arrow{
   left: -5px !important;
