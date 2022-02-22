@@ -297,6 +297,10 @@ const updateData = () => {
   justify-content: center;
   align-items: center;
 }
+.el-icon{
+  height: 1.4em;
+  padding-inline: 5px;
+}
 .el-message-box{
   width: 300px;
   height: 130px;
@@ -304,9 +308,12 @@ const updateData = () => {
   background: #ffff;
   color: #db984c;
 }
+.el-message-box__headerbtn{
+  display: none;
+}
 .el-message-box__container{
   display: flex;
-  padding-block: 20px;
+  padding-block: 30px;
 }
 .el-message-box__btns{
   position: relative;

@@ -9,6 +9,7 @@ import AddUser from './mainPage/AddUser.vue';
 import GasManager from './mainPage/GasManager.vue';
 import CardManager from './mainPage/CardManager.vue';
 import QueryCard from './mainPage/QueryCard.vue';
+import AddGascard from './mainPage/AddGascard.vue';
 import U from '../utils/index';
 
 const store = useStore();
@@ -153,6 +154,7 @@ const changeTab = (eve) => {
                   <el-dropdown-menu>
                     <el-dropdown-item command='气卡管理'>气卡管理</el-dropdown-item>
                     <el-dropdown-item command='查询气卡'>查询气卡</el-dropdown-item>
+                    <el-dropdown-item command='添加气卡'>添加气卡</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
@@ -204,6 +206,8 @@ const changeTab = (eve) => {
           <card-manager v-show ="showTab===asideList.managerList[4]"> </card-manager>
           <!-- 查询气卡 -->
           <query-card v-show="showTab ==='查询气卡'"></query-card>
+          <!-- 添加气卡 -->
+          <add-gascard v-show="showTab ==='添加气卡'"></add-gascard>
         </el-main>
       </el-container>
     </el-container>
@@ -302,5 +306,8 @@ body{
 
 #app .el-container .el-header{
   background: #f5f5f5;
+}
+.el-tabs__new-tab{
+  display: none;
 }
 </style>
