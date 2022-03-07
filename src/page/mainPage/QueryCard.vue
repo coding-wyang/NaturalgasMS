@@ -1,7 +1,7 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { ElMessageBox } from 'element-plus';
-import { cardQuery, cardDelete } from '../../http/api';
+import { cardQuery, cardDelete, cardUserUpdate } from '../../http/api';
 
 const formInline = reactive({
   cardId: '',
@@ -10,16 +10,23 @@ const formInline = reactive({
 const cardData = reactive({
   data: [],
 });
-
-/* const isShowResult = ref(false); */
+const editInfo = reactive({
+  newId: '',
+  newName: '',
+});
+const isDialog = ref(false);
+const formIndex = ref('');
+/* 根据表单信息查询 */
 const onSubmit = () => {
-  cardQuery(formInline).then((res) => {
-    console.log('asdasd', res);
-    cardData.data = res.data;
-    console.log(cardData.data);
-  });
+  if (formInline.cardId !== '' || formInline.name !== '') {
+    cardQuery(formInline).then((res) => {
+      console.log('asdasd', res);
+      cardData.data = res.data;
+      console.log(cardData.data);
+    });
+  }
 };
-
+/* 删除card */
 const deleteCard = (index) => {
   ElMessageBox.confirm('此操作将永久删除该账号，是否继续？', {
     confirmButtonText: '确定',
@@ -30,6 +37,26 @@ const deleteCard = (index) => {
       console.log('delete', rel);
     });
   });
+};
+/* 修改信息 */
+const editCard = (index) => {
+  formIndex.value = index;
+  isDialog.value = true;
+};
+/* 更改绑定用户 */
+const changeUser = () => {
+  if (cardData.data[formIndex.value].username !== editInfo.newId) {
+    cardData.data[formIndex.value].name = editInfo.newName;
+    cardData.data[formIndex.value].username = editInfo.newId;
+    cardUserUpdate(cardData.data[formIndex.value]).then((res) => {
+      console.log('res', res);
+      if (res.state === 200) {
+        isDialog.value = false;
+      }
+    });
+  } else {
+    ElMessageBox.confirm('修改后的户主不得与原户主一致');
+  }
 };
 </script>
 
@@ -66,11 +93,29 @@ const deleteCard = (index) => {
     </el-descriptions-item>
     <el-descriptions-item label="累计用气量">{{item.cumulative}}</el-descriptions-item>
     <el-descriptions-item label="操作">
-        <el-button type="success"  style="color: white;">缴费</el-button>
-        <el-button type="error" @click='deleteCard(index)' style="color: white;">删除</el-button>
+        <el-button type="primary" @click='editCard(index)'>更换户主</el-button>
+        <el-button type="success">缴费</el-button>
+        <el-button type="error" @click='deleteCard(index)' style="color: white">删除</el-button>
     </el-descriptions-item>
   </el-descriptions>
   </div>
+  <el-dialog
+  v-model="isDialog">
+  <el-form  :model="cardData.data[formIndex]" class="demo-form-inline">
+    <el-form-item label="气卡ID">
+      <el-input disabled v-model="cardData.data[formIndex].cardid"></el-input>
+    </el-form-item>
+    <el-form-item label="卡主">
+      <el-input disabled v-model="cardData.data[formIndex].name"></el-input>
+    </el-form-item>
+    <el-form-item label="新卡主">
+      <el-input v-model="editInfo.newName"></el-input>
+    </el-form-item>
+    <el-form-item label="新卡主ID">
+      <el-input v-model="editInfo.newId"></el-input>
+    </el-form-item>
+  </el-form>
+  <el-button type="success" @click="changeUser">确定</el-button></el-dialog>
   </div>
 </el-card>
 </template>

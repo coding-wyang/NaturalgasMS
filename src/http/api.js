@@ -36,4 +36,8 @@ export const cardDelete = (data) => http.get('/gascard/delete', {
   data,
 });
 
+export const cardUserUpdate = (data) => http.get('/gascard/update', {
+  data,
+});
+
 export const gasGet = () => fetch('/api/gasGet');

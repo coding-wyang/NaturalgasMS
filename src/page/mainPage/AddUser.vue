@@ -2,12 +2,14 @@
 import { reactive, ref } from 'vue';
 import { userAdd } from '../../http/api';
 
+/* 添加表单 */
 const addForm = reactive({
   user: '',
   pass: '',
-  type: '',
+  type: '', // 权限
 });
 
+/* 校验规则 */
 const rules = reactive({
   user: [{ required: true, message: '请输入账号', trigger: 'blur' }],
   pass: [{ required: true, message: '请输入密码', trigger: 'blur' },
@@ -16,6 +18,7 @@ const rules = reactive({
     }],
 });
 
+/* el-select 的参数 */
 const value = ref('');
 const options = [
   {
@@ -32,10 +35,11 @@ const options = [
   },
 ];
 
+/* select value改变时更改选中权限 */
 const typeChange = (val) => {
   addForm.type = val;
 };
-
+/* 添加用户 */
 const addUser = () => {
   userAdd(addForm).then((res) => {
     console.log('adduser:::', res);

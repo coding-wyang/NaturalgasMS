@@ -19,7 +19,7 @@ const userList = reactive({
   tableData: [
   ],
 });
-
+/* 搜索 */
 const search = ref('');
 const filterTableData = computed(() => userList.tableData.filter(
   (data) => !search.value
@@ -318,6 +318,9 @@ const updateData = () => {
 .el-message-box__btns{
   position: relative;
   left: 90px;
+}
+.el-message-box__message{
+  margin: 0 auto;
 }
 
 </style>

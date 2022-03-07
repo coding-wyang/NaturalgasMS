@@ -5,21 +5,20 @@ import { gascardGet } from '../../http/api';
 onMounted(() => {
   getCardinfo();
 });
-
 const cardInfo = reactive({ data: '' });
-
+/* card的数量统计 */
 const count = reactive({
   cardCount: 0,
   normalCount: 0,
   arrearsCount: 0,
   unboundCount: 0,
 });
-
+/* card的信息获取 */
 const getCardinfo = () => {
   gascardGet().then((res) => {
     cardInfo.data = res;
     cardInfo.data.forEach((element) => {
-      if (element.username === '') {
+      if (element.username === '未绑定') {
         count.unboundCount++;
       }
       if (element.state === 'normal') {

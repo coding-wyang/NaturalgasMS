@@ -7,6 +7,7 @@ onMounted(() => {
   gasMockGet();
 });
 
+/* 获取mock.js的气体数据 */
 const gasMockGet = () => {
   gasGet().then((res) => {
     res.json().then(({ data }) => {
@@ -26,6 +27,7 @@ const gasMockGet = () => {
     console.log(err);
   });
 };
+/* 气体监测信息 */
 const gasInfo = reactive([
   { name: '酸碱度', value: Number }, // 酸碱度
   { name: '发热值', value: Number }, // 发热值
@@ -34,11 +36,12 @@ const gasInfo = reactive([
   { name: '甲烷', value: Number }, //  甲烷
   { name: '总硫', value: Number }, //  总硫
 ]);
-
+/* 统计指标信息 */
 const equipment = reactive([
   { name: '设备总数', value: 26 }, // 设备总数
 ]);
 
+/* 雪碧图name */
 const iconSave = reactive([
   'fangkuai',
   'xiaohua',
