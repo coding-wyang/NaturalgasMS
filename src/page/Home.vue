@@ -3,16 +3,12 @@ import {
   ref, computed, onMounted,
 } from 'vue';
 import { useStore } from 'vuex';
-import MonitorInfo from './mainPage/MonitorInfo.vue';
-import UserManager from './mainPage/UserManager.vue';
-import AddUser from './mainPage/AddUser.vue';
-import GasManager from './mainPage/GasManager.vue';
-import CardManager from './mainPage/CardManager.vue';
-import QueryCard from './mainPage/QueryCard.vue';
-import AddGascard from './mainPage/AddGascard.vue';
+import { useRouter } from 'vue-router';
+
 import U from '../utils/index';
 
 const store = useStore();
+const router = useRouter();
 const editableTabsValue = ref('0');// 控制tab高亮显示
 const editableTabs = ref([
   { title: '监测信息', name: '0' },
@@ -25,6 +21,19 @@ onMounted(() => {
   console.log(showTab);
 });
 const userType = computed(() => store.state.currentUser);
+
+const routerList = ref({
+  managerList: {
+    监测信息: 'Monitor',
+    用户管理: 'User',
+    添加用户: 'AddUser',
+    燃气管理: 'Gas',
+    缴费管理: 'Pay',
+    气卡管理: 'Card',
+    查询气卡: 'QueryCard',
+    添加气卡: 'AddCard',
+  },
+});
 
 const asideList = ref(
   {
@@ -48,7 +57,8 @@ const asideList = ref(
 );
 /* 增加tab */
 function addTableTab(e) {
-  console.log(e);
+  const rLink = routerList.value.managerList[e];
+  router.push(`/Home/${rLink}`);
   showTab.value = e;
   const isExsit = editableTabs.value.find((value) => value.title === e);
   /* 通过Array.find 确认该标签是否存在 */
@@ -90,20 +100,21 @@ const removeTab = (targetName) => {
     editableTabs.value = tabs.filter((tab) => tab.name !== targetName);
     /* Array.find()方法找到当前name的title赋给main页面控制器 */
     const saveName = editableTabs.value.find((value) => value.name === activeName);
-    showTab.value = saveName.title;
-    /* showTab.value = editableTabs.value[activeName].title; */
+    console.log(saveName);
+    const rLink = routerList.value.managerList[saveName.title];
+    router.push(`/Home/${rLink}`);
   }
 };
 
 /* 处理el—dropdown-item */
 const handleCommand = (val) => {
-  console.log('ifssLL:::', val);
   addTableTab(val);
 };
 
 const changeTab = (eve) => {
   /* 通过tab标签 控制main页面切换 */
-  showTab.value = eve.target.innerText;
+  const rLink = routerList.value.managerList[eve.target.innerText];
+  router.push(`/Home/${rLink}`);
 };
 </script>
 
@@ -114,14 +125,14 @@ const changeTab = (eve) => {
           <!-- 管理员侧边栏 -->
           <ul class="ul-box" v-if="userType ==='0'">
             <li>
-              <div class="icon-monito" @click='addTableTab(asideList.managerList[0])'>
+              <div class="icon-monito" @click='addTableTab(asideList.managerList[0], routerList.managerList.monitor)'>
                 <svg-icon class="aside-icon" name="monitor"/>
               </div>
                 <p>监测信息</p>
             </li>
             <li>
               <el-dropdown @command="handleCommand($event)" placement="bottom-end" size="small">
-              <div class="icon-manager" @click='addTableTab(asideList.managerList[1])'>
+              <div class="icon-manager" @click='addTableTab(asideList.managerList[1], routerList.managerList.user)'>
                 <svg-icon class="aside-icon" name="star"/>
               </div>
               <template #dropdown>
@@ -134,20 +145,20 @@ const changeTab = (eve) => {
               <p>用户管理</p>
             </li>
             <li>
-              <div class="icon-fire" @click='addTableTab(asideList.managerList[2])'>
+              <div class="icon-fire" @click='addTableTab(asideList.managerList[2],routerList.managerList.gas)'>
                 <svg-icon class="aside-icon" name="gas"/>
               </div >
               <p>燃气管理</p>
             </li>
             <li>
-              <div class="icon-pay" @click='addTableTab(asideList.managerList[3])'>
+              <div class="icon-pay" @click='addTableTab(asideList.managerList[3],routerList.managerList.pay)'>
                 <svg-icon class="aside-icon" name="diamond"/>
               </div >
               <p>缴费管理</p>
             </li>
             <li>
               <el-dropdown  @command="handleCommand($event)" placement="bottom-end" size="small">
-              <div class="icon-slid" @click='addTableTab(asideList.managerList[4])'>
+              <div class="icon-slid" @click='addTableTab(asideList.managerList[4],routerList.managerList.card)'>
                 <svg-icon class="aside-icon" name="sliders"/>
               </div >
               <template #dropdown>
@@ -194,20 +205,11 @@ const changeTab = (eve) => {
             >
             </el-tab-pane>
           </el-tabs>
-          <!-- 监测信息 -->
-          <monitor-info v-show="showTab === asideList.managerList[0]"></monitor-info>
-          <!-- 用户管理 -->
-          <user-manager v-show="showTab === asideList.managerList[1]"></user-manager>
-          <!-- 添加用户 -->
-          <add-user v-show="showTab ==='添加用户'"></add-user>
-          <!-- 燃气管理 -->
-          <gas-manager v-show ="showTab===asideList.managerList[2]"></gas-manager>
-          <!-- 气卡管理 -->
-          <card-manager v-show ="showTab===asideList.managerList[4]"> </card-manager>
-          <!-- 查询气卡 -->
-          <query-card v-show="showTab ==='查询气卡'"></query-card>
-          <!-- 添加气卡 -->
-          <add-gascard v-show="showTab ==='添加气卡'"></add-gascard>
+          <div class='child'>
+            <keep-alive>
+              <router-view/>
+            </keep-alive>
+          </div>
         </el-main>
       </el-container>
     </el-container>
