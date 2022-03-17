@@ -24,4 +24,20 @@ export const userAdd = (data) => http.get('/user/add', {
   data,
 });
 
+export const gascardGet = (data) => http.get('/gascard', {
+  data,
+});
+
+export const cardQuery = (data) => http.get('/gascard/query', {
+  data,
+});
+
+export const cardDelete = (data) => http.get('/gascard/delete', {
+  data,
+});
+
+export const cardUserUpdate = (data) => http.get('/gascard/update', {
+  data,
+});
+
 export const gasGet = () => fetch('/api/gasGet');

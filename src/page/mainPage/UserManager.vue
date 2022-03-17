@@ -19,7 +19,7 @@ const userList = reactive({
   tableData: [
   ],
 });
-
+/* 搜索 */
 const search = ref('');
 const filterTableData = computed(() => userList.tableData.filter(
   (data) => !search.value
@@ -144,12 +144,12 @@ const updateData = () => {
                 </div>
                 </template>
               </el-table-column>
-              <el-table-column label="账号等级" width="180">
+              <el-table-column label="账号等级" width="180px">
                   <template #default="scope">
                     <span> {{ scope.row.type }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="Operations">
+                  <el-table-column>
                     <template #header>
         <el-input v-model="search" size="small" placeholder="Type to search" />
       </template>
@@ -207,7 +207,7 @@ const updateData = () => {
   border-radius: 7px;
   margin-block: 10px;
   margin-inline: 14px;
-  box-shadow: 5px 5px 5px rgb(236, 236, 236), -5px -5px 5px rgb(233, 233, 233),-5px 5px 5px rgb(235, 235, 235), 5px -5px 5px rgb(236, 236, 236);
+  box-shadow: 5px 5px 23px rgb(236, 236, 236), -5px -5px 23px rgb(233, 233, 233),-5px 5px 23px rgb(235, 235, 235), 5px -5px 23px rgb(236, 236, 236) ;
 }
 /* svg 及用户信息上半部分的盒子 */
 .user-count >:nth-child(1){
@@ -267,25 +267,39 @@ const updateData = () => {
   border-radius: 7px;
   margin-block: 10px;
   margin-inline: 14px;
-  box-shadow: 5px 5px 5px rgb(236, 236, 236), -5px -5px 5px rgb(233, 233, 233),-5px 5px 5px rgb(235, 235, 235), 5px -5px 5px rgb(236, 236, 236);
+  box-shadow: 5px 5px 23px rgb(236, 236, 236), -5px -5px 23px rgb(233, 233, 233),-5px 5px 23px rgb(235, 235, 235), 5px -5px 23px rgb(236, 236, 236);
 }
 
 .user-list-box{
   background-color: rgb(252, 252, 252);
   width: 100%;
-  height: 320px;
+  height: 390px;
   border-radius: 7px;
   margin-block: 10px;
   margin-inline: 14px;
-
+  overflow-y: auto
 }
-/* .user-List-box>ul{
-  height: 300px;
-} */
+.user-list-box::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.user-list-box::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: #c3c3c3;
+}
+.user-list-box::-webkit-scrollbar-track {
+  background-color: transparent;
+}
 .el-overlay{
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.el-icon{
+  height: 1.4em;
+  padding-inline: 5px;
 }
 .el-message-box{
   width: 300px;
@@ -294,13 +308,19 @@ const updateData = () => {
   background: #ffff;
   color: #db984c;
 }
+.el-message-box__headerbtn{
+  display: none;
+}
 .el-message-box__container{
   display: flex;
-  padding-block: 20px;
+  padding-block: 30px;
 }
 .el-message-box__btns{
   position: relative;
   left: 90px;
+}
+.el-message-box__message{
+  margin: 0 auto;
 }
 
 </style>

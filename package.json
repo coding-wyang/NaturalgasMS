@@ -2,7 +2,7 @@
   "name": "naturalgasms",
   "version": "0.0.0",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development vite",
+    "dev": "vite --mode development",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.0.0",
-    "cross-env": "^7.0.3",
     "eslint": "^7.27.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-import-resolver-alias": "^1.1.2",
