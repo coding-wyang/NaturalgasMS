@@ -24,6 +24,7 @@ const getLogin = () => {
       router.push('/Home');
       sessionStorage.setItem('userName', loginForm.user);
       sessionStorage.setItem('userToken', res.token);
+      sessionStorage.setItem('userType', res.type);
     } else {
       ElMessage.error('登录失败');
     }

@@ -1,18 +1,18 @@
 <script setup>
 import {
-  onMounted, reactive, ref, computed,
+  reactive, ref, computed, onBeforeMount,
 } from 'vue';
 import { ElMessageBox } from 'element-plus';
 import { userInfoGet, userUpdate, userDelete } from '../../http/api';
 
-onMounted(() => {
+onBeforeMount(() => {
   userGet();
 });
 /* 用户信息模板 */
 const userInfo = reactive([
-  { name: '用户总数', value: Number },
-  { name: '正常用户数量', value: Number },
-  { name: '欠费用户数量', value: Number },
+  { name: '用户总数', value: '' },
+  { name: '正常用户数量', value: '' },
+  { name: '欠费用户数量', value: '' },
 ]);
 
 const userList = reactive({
@@ -47,7 +47,6 @@ const handleDelete = (row) => {
       console.log('delete::', res);
     });
   });
-  console.log(row);
 };
 /* 获取用户信息 */
 const userGet = () => {
@@ -56,7 +55,6 @@ const userGet = () => {
     userInfo[1].value = res.data.normalCount;
     userInfo[2].value = res.data.arrearsCount;
     userList.tableData = res.userlist;
-    console.log('ss', userList.tableData);
   });
 };
 /* 选择器的值 */
