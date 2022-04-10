@@ -15,11 +15,6 @@ const editableTabs = ref([
 ]);// tab列表 初始默认值为监测信息
 let tabIndex = 0;
 const showTab = ref('监测信息'); // 控制main页面显示tab对应的内容
-
-onMounted(() => {
-  U.sessionSave(store);
-  console.log(showTab);
-});
 const userType = computed(() => store.state.currentUser);
 
 const routerList = ref({
@@ -33,6 +28,14 @@ const routerList = ref({
     查询气卡: 'QueryCard',
     添加气卡: 'AddCard',
   },
+  userList: {
+    缴费业务: '1',
+  },
+});
+
+onMounted(() => {
+  U.sessionSave(store);
+  router.push('/Home');
 });
 
 const asideList = ref(
