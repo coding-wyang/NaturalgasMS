@@ -40,4 +40,8 @@ export const cardUserUpdate = (data) => http.get('/gascard/update', {
   data,
 });
 
+export const cardAdd = (data) => http.get('/gascard/add', {
+  data,
+});
+
 export const gasGet = () => fetch('/api/gasGet');
