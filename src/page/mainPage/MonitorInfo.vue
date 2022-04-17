@@ -12,7 +12,6 @@ const gasMockGet = () => {
   gasGet().then((res) => {
     res.json().then(({ data }) => {
       /* updateSave.splice(0, 1, { data }); */
-      console.log('data', data);
       gasInfo[0].value = data.PH;
       gasInfo[1].value = data.Calorificvalue;
       gasInfo[2].value = data.wdp;

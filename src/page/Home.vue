@@ -23,6 +23,7 @@ const routerList = ref({
     用户管理: 'User',
     添加用户: 'AddUser',
     燃气管理: 'Gas',
+    抄表: 'MeterRead',
     缴费管理: 'Pay',
     气卡管理: 'Card',
     查询气卡: 'QueryCard',
@@ -60,6 +61,7 @@ const asideList = ref(
 );
 /* 增加tab */
 function addTableTab(e) {
+  console.log('11', 11);
   const rLink = routerList.value.managerList[e];
   router.push(`/Home/${rLink}`);
   showTab.value = e;
@@ -148,9 +150,17 @@ const changeTab = (eve) => {
               <p>用户管理</p>
             </li>
             <li>
+              <el-dropdown  @command="handleCommand($event)" placement="bottom-end" size="small">
               <div class="icon-fire" @click='addTableTab(asideList.managerList[2],routerList.managerList.gas)'>
                 <svg-icon class="aside-icon" name="gas"/>
               </div >
+              <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command='燃气管理'>燃气管理</el-dropdown-item>
+                    <el-dropdown-item command='抄表'>抄表</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+                </el-dropdown>
               <p>燃气管理</p>
             </li>
             <li>
@@ -210,7 +220,7 @@ const changeTab = (eve) => {
           </el-tabs>
           <div class='child'>
             <keep-alive>
-              <router-view/>
+              <router-view  @addTableTab='addTableTab'/>
             </keep-alive>
           </div>
         </el-main>

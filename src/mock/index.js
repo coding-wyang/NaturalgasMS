@@ -13,6 +13,9 @@ export default [
         methane: '@integer(60, 100)',
         sulfur: '@integer(20, 35)',
       },
+      meterData: {
+        diff: '@integer(3, 8, 1, 1)',
+      },
     }),
   },
 ];
