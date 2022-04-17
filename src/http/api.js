@@ -44,4 +44,11 @@ export const cardAdd = (data) => http.get('/gascard/add', {
   data,
 });
 
+export const meterRead = (data) => http.get('/readmeter/diff', {
+  data,
+});
+
+export const gasmeterGetAll = () => http.get('/gasmeter/getall');
+export const gasmeterGet = (data) => http.get('/gasmeter/get', { data });
+
 export const gasGet = () => fetch('/api/gasGet');

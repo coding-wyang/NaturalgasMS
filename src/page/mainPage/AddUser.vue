@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, ref } from 'vue';
+import { ElMessage } from 'element-plus';
 import { userAdd } from '../../http/api';
 
 /* 添加表单 */
@@ -40,9 +41,18 @@ const typeChange = (val) => {
   addForm.type = val;
 };
 /* 添加用户 */
-const addUser = () => {
-  userAdd(addForm).then((res) => {
-    console.log('adduser:::', res);
+const addUser = (val) => {
+  if (!val) return;
+  val.validate((valid) => {
+    if (valid) {
+      userAdd(addForm).then((res) => {
+        if (res.status === 200) {
+          ElMessage.success('添加成功');
+        }
+      });
+    } else {
+      console.log('error submit!');
+    }
   });
 };
 </script>
@@ -70,7 +80,7 @@ const addUser = () => {
               </el-select>
           </el-form-item>
           <div class="login-button">
-            <el-button  type="primary" style="width:150px;" @click="addUser">确认添加</el-button>
+            <el-button  type="primary" style="width:150px;" @click="addUser(ruleFormRef)">确认添加</el-button>
           </div>
         </el-form>
     </div>
