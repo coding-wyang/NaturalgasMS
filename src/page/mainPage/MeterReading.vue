@@ -28,10 +28,13 @@ onMounted(() => {
 });
 
 const dateFormite = (val) => {
+  let arr = [];
+  arr = val.split('-');
+  console.log('asdasd', arr);
   const day = {
-    year: val.slice(0, 4),
-    month: val.slice(5, 7),
-    date: val.slice(8, 10),
+    year: arr[0],
+    month: arr[1],
+    date: arr[2],
   };
   lastDate.value = day;
 };

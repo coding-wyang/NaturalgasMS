@@ -108,6 +108,15 @@ const routes = [
         },
         component: () => import('../page/mainPage/MeterReading.vue'),
       },
+      {
+        path: 'ReadRecord',
+        name: 'ReadRecord',
+        meta: {
+          title: '抄表记录',
+          keepAlive: true,
+        },
+        component: () => import('../page/mainPage/ReadRecord.vue'),
+      },
     ],
   },
 ];

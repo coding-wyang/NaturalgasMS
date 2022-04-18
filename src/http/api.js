@@ -49,6 +49,9 @@ export const meterRead = (data) => http.get('/readmeter/diff', {
 });
 
 export const gasmeterGetAll = () => http.get('/gasmeter/getall');
+
 export const gasmeterGet = (data) => http.get('/gasmeter/get', { data });
+
+export const readRecordGetAll = () => http.get('/meterread/getall');
 
 export const gasGet = () => fetch('/api/gasGet');
