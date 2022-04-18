@@ -24,6 +24,7 @@ const routerList = ref({
     添加用户: 'AddUser',
     燃气管理: 'Gas',
     抄表: 'MeterRead',
+    抄表记录: 'ReadRecord',
     缴费管理: 'Pay',
     气卡管理: 'Card',
     查询气卡: 'QueryCard',
@@ -61,7 +62,6 @@ const asideList = ref(
 );
 /* 增加tab */
 function addTableTab(e) {
-  console.log('11', 11);
   const rLink = routerList.value.managerList[e];
   router.push(`/Home/${rLink}`);
   showTab.value = e;
@@ -158,6 +158,7 @@ const changeTab = (eve) => {
                   <el-dropdown-menu>
                     <el-dropdown-item command='燃气管理'>燃气管理</el-dropdown-item>
                     <el-dropdown-item command='抄表'>抄表</el-dropdown-item>
+                    <el-dropdown-item command='抄表记录'>抄表记录</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
                 </el-dropdown>
