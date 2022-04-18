@@ -117,6 +117,15 @@ const routes = [
         },
         component: () => import('../page/mainPage/ReadRecord.vue'),
       },
+      {
+        path: 'ReadEchart',
+        name: 'ReadEchart',
+        meta: {
+          title: '抄表展示',
+          keepAlive: true,
+        },
+        component: () => import('../page/mainPage/ReadEchart.vue'),
+      },
     ],
   },
 ];

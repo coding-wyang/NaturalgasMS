@@ -2,8 +2,10 @@
 import {
   onMounted, ref, computed, reactive,
 } from 'vue';
+import { useRouter } from 'vue-router';
 import { readRecordGetAll } from '../../http/api';
 
+const router = useRouter();
 const search = ref('');
 const filterTableData = computed(() => readRecordList.tableData.filter(
   (data) => !search.value || data.meterid.toLowerCase().includes(search.value.toLowerCase()),
@@ -17,6 +19,10 @@ onMounted(() => {
     readRecordList.tableData = res;
   });
 });
+
+const toEchart = (row) => {
+  router.push({ path: 'ReadEchart', query: { id: row.meterid } });
+};
 </script>
 
 <template>
@@ -25,7 +31,7 @@ onMounted(() => {
       <h5>抄表记录</h5>
       <el-divider/>
       <div class='table-style'>
-        <el-table :data="filterTableData" style="width: 100%; background-color: rgb(248, 248, 248);">
+        <el-table :data="filterTableData" @cell-click="toEchart" style="width: 100%; background-color: rgb(248, 248, 248);">
           <el-table-column label="气表ID" width="180">
             <template #default="scope">
               <div style="display: flex; align-items: center">
