@@ -89,7 +89,7 @@ const changeUser = () => {
     <el-descriptions-item label="联系方式" :span="3"></el-descriptions-item>
     <el-descriptions-item label="状态" >{{item.state}}</el-descriptions-item>
     <el-descriptions-item label="余额">
-      <el-tag size="normal">{{item.balance}} 元</el-tag>
+      <el-tag size="normal">{{Number(item.balance.$numberDecimal).toFixed(2)}} 元</el-tag>
     </el-descriptions-item>
     <el-descriptions-item label="累计用气量">{{item.cumulative}}</el-descriptions-item>
     <el-descriptions-item label="操作">
