@@ -65,7 +65,7 @@ const getCardinfo = () => {
         <svg-icon class="info-icon" name="user"/>
         <p>{{item.name}}</p>
         <p>ID: {{item.cardid}}</p>
-        <p>余额: {{item.balance}} 元</p>
+        <p>余额: {{Number(item.balance.$numberDecimal).toFixed(2)}} 元</p>
         <p>累计用量: {{item.cumulative}} 立方</p>
       </div>
     </div>
