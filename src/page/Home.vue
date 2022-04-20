@@ -27,6 +27,7 @@ const routerList = ref({
     抄表记录: 'ReadRecord',
     缴费管理: 'Pay',
     气卡管理: 'Card',
+    气卡信息: 'CardMessage',
     查询气卡: 'QueryCard',
     添加气卡: 'AddCard',
   },
@@ -178,6 +179,7 @@ const changeTab = (eve) => {
               <template #dropdown>
                   <el-dropdown-menu>
                     <el-dropdown-item command='气卡管理'>气卡管理</el-dropdown-item>
+                    <el-dropdown-item command='气卡信息'>气卡信息</el-dropdown-item>
                     <el-dropdown-item command='查询气卡'>查询气卡</el-dropdown-item>
                     <el-dropdown-item command='添加气卡'>添加气卡</el-dropdown-item>
                   </el-dropdown-menu>

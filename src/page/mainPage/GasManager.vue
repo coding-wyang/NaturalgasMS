@@ -56,7 +56,7 @@ const handleMeter = (id) => {
   flex-wrap: wrap;
 }
 .gas-child-box{
-  background-color: #8bdbba;
+  background-color: #FFA600;
   width: 300px;
   height: 200px;
   border-radius: 5px;
@@ -67,7 +67,7 @@ const handleMeter = (id) => {
   padding: 7px;
   width: 50px;
   height: 50px;
-  color: rgb(216, 216, 216);
+  color: rgb(238, 62, 62);
 }
 .gas-child-box>:nth-child(2){
   font-size: 1.7em;

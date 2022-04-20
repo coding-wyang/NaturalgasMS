@@ -1,8 +1,11 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { ElMessageBox } from 'element-plus';
+import { useRouter } from 'vue-router';
 import { cardQuery, cardDelete, cardUserUpdate } from '../../http/api';
 
+const router = useRouter();
+const payValue = ref();
 const formInline = reactive({
   cardId: '',
   name: '',
@@ -58,6 +61,16 @@ const changeUser = () => {
     ElMessageBox.confirm('修改后的户主不得与原户主一致');
   }
 };
+const dialogvisible = ref(false);
+const handlePay = () => {
+  router.push({
+    path: 'PayIndex',
+    query: {
+      value: payValue.value,
+      cardid: cardData.data[formIndex.value].cardid,
+    },
+  });
+};
 </script>
 
 <template>
@@ -94,11 +107,17 @@ const changeUser = () => {
     <el-descriptions-item label="累计用气量">{{item.cumulative}}</el-descriptions-item>
     <el-descriptions-item label="操作">
         <el-button type="primary" @click='editCard(index)'>更换户主</el-button>
-        <el-button type="success">缴费</el-button>
+        <el-button type="success" @click='dialogvisible = true; formIndex = index;'>缴费</el-button>
         <el-button type="error" @click='deleteCard(index)' style="color: white">删除</el-button>
     </el-descriptions-item>
   </el-descriptions>
   </div>
+  <el-dialog
+  v-model="dialogvisible"
+  width='15%'>
+  <el-input  v-model="payValue" placeholder="请输入金额"></el-input>
+  <el-button round="true" type="success" style='margin-left:75px;margin-top:6px;' @click="handlePay">确定</el-button>
+  </el-dialog>
   <el-dialog
   v-model="isDialog">
   <el-form  :model="cardData.data[formIndex]" class="demo-form-inline">

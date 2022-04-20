@@ -70,7 +70,7 @@ const routes = [
           title: '缴费管理',
           keepAlive: true,
         },
-        component: () => import('../page/mainPage/MonitorInfo.vue'),
+        component: () => import('../page/mainPage/PayManager.vue'),
       },
       {
         path: 'Card',
@@ -125,6 +125,24 @@ const routes = [
           keepAlive: true,
         },
         component: () => import('../page/mainPage/ReadEchart.vue'),
+      },
+      {
+        path: 'CardMessage',
+        name: 'CardMessage',
+        meta: {
+          title: '气卡信息',
+          keepAlive: true,
+        },
+        component: () => import('../page/mainPage/CardMessage.vue'),
+      },
+      {
+        path: 'PayIndex',
+        name: 'PayIndex',
+        meta: {
+          title: '支付页面',
+          keepAlive: true,
+        },
+        component: () => import('../page/mainPage/PayIndex.vue'),
       },
     ],
   },

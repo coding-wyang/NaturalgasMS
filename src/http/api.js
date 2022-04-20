@@ -56,4 +56,6 @@ export const readRecordGetAll = () => http.get('/meterread/getall');
 
 export const readRecordGet = (data) => http.get('/meterread/get', { data });
 
+export const cardGetById = (data) => http.get('/gascard/get/id', { data });
+
 export const gasGet = () => fetch('/api/gasGet');
