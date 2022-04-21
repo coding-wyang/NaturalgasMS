@@ -1,8 +1,10 @@
 <script setup>
-import { ElMessage } from 'element-plus';
+/* import { ElMessage } from 'element-plus'; */
 import { reactive, ref } from 'vue';
-import { cardAdd } from '../../http/api';
+import { useRouter } from 'vue-router';
+/* import { cardAdd } from '../../http/api'; */
 
+const router = useRouter();
 const addCardForm = reactive({
   name: '',
   cardId: '',
@@ -35,6 +37,20 @@ const addCard = (val) => {
   if (!val) return;
   val.validate((valid) => {
     if (valid) {
+      router.push({
+        path: 'PayIndex',
+        query: {
+          payment: addCardForm.balance,
+          cardid: addCardForm.cardId,
+          state: 'first',
+          firstInfo: JSON.stringify({
+            username: addCardForm.username,
+            name: addCardForm.name,
+          }),
+        },
+      });
+    }
+    /* if (valid) {
       cardAdd(addCardForm).then((res) => {
         console.log('11', res);
         if (res.status === 200) {
@@ -43,7 +59,7 @@ const addCard = (val) => {
       });
     } else {
       ElMessage.error('数据有误');
-    }
+    } */
   });
 };
 

@@ -1,12 +1,64 @@
 <script setup>
-import { useRoute } from 'vue-router';
-import { /* ref, onMounted, */ computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { ref, onMounted, computed } from 'vue';
+/* import QRCode from 'qrcode'; */
+import QrcodeVue from 'qrcode.vue';
+import { ElMessage } from 'element-plus';
+import { baseURL } from '../../utils/baseUrl';
+import { cardQuery } from '../../http/api';
 
 const route = useRoute();
+const router = useRouter();
 const payData = computed(() => route.query);
-/* onMounted(() => {
-  payData.value = route.query;
-}); */
+const state = ref('unFirst');
+const firstInfo = ref('null');
+if (payData.value.state === 'first') {
+  state.value = payData.value.state;
+  firstInfo.value = payData.value.firstInfo;
+}
+console.log('sda', state.value, firstInfo.value);
+const balance = ref(0);
+/* const value = ref(`http://${baseURL}:8900/PayPhone?payment=${payData.value.payment}&cardid=${payData.value.cardid}`); */
+const value = ref(`http://${baseURL}:8900/PayPhone?payment=${payData.value.payment}&cardid=${payData.value.cardid}&state=${payData.value.state}&firstInfo=${payData.value.firstInfo}`);
+onMounted(() => {
+  if (payData.value.state !== 'first') {
+    cardQuery({ cardId: payData.value.cardid, name: '' }).then((res) => {
+      balance.value = Number(res.data[0].balance.$numberDecimal);
+    });
+  }
+});
+const diableShow = ref(false);
+
+const intTimer = ref();
+const payNow = () => {
+  diableShow.value = true;
+  if (payData.value.state !== 'first') {
+    intTimer.value = setInterval(() => {
+      cardQuery({ cardId: payData.value.cardid, name: '' }).then((res) => {
+        if (balance.value !== Number(res.data[0].balance.$numberDecimal)) {
+          closeDia();
+        }
+      });
+    }, 5000);
+  } else {
+    intTimer.value = setInterval(() => {
+      cardQuery({ cardId: payData.value.cardid, name: '' }).then((res) => {
+        if (res) {
+          closeDia();
+        }
+      });
+    }, 5000);
+  }
+};
+
+const closeDia = () => {
+  diableShow.value = false;
+  clearInterval(intTimer.value);
+  ElMessage.success('缴费成功');
+  setTimeout(() => {
+    router.go(-1);
+  }, 3000);
+};
 
 </script>
 
@@ -23,7 +75,7 @@ const payData = computed(() => route.query);
             <div style="height: 10px"></div>
             <div class='info-children'>
               <span>金额：</span>
-              <span>{{`￥${payData.value}`}}</span>
+              <span>{{`￥${payData.payment}`}}</span>
             </div>
           </div>
         </div>
@@ -33,13 +85,22 @@ const payData = computed(() => route.query);
             <div class='method-box'>
             <input type="radio" id="huey" name="contact" value="huey" checked>
             <img src="../../assets/zhifubao.png">
+            <img class='tuijian' src='../../assets/tuijian.png'>
           </div>
           <div class='method-box'>
             <input type="radio" id="huey" name="contact" value="huey" checked>
-            <img src="../../assets/weixin.png">
+            <img class='weixin' src="../../assets/weixin.png">
           </div>
           </div>
         </div>
+        <el-button @click="payNow" style="margin-left: 5%; margin-top:20px; width: 160px;" type="primary" size='large'>立即支付</el-button>
+        <el-button style="margin-left: 5%; margin-top:20px; width: 160px;" type="primary" size='large'>我再想想</el-button>
+        <el-dialog v-model="diableShow" width="20%">
+          <div class='dia-box'>
+            <span>扫下方二维码付钱</span>
+            <qrcode-vue class='qrcode' :value="value" :size="size" level="H" />
+          </div>
+        </el-dialog>
       </div>
       <div class='computer-role'></div>
       <div class='computer-foot'></div>
@@ -47,7 +108,20 @@ const payData = computed(() => route.query);
   </el-card>
 </template>
 
-<style scope>
+<style>
+.el-message{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 35px;
+  border-radius: 5px;
+  background: #ffff;
+  color: #51ff01;
+}
 .computer-body{
   width: 80%;
   margin: 0 auto;
@@ -120,6 +194,10 @@ const payData = computed(() => route.query);
   margin-left: 5%;
   margin-top: 10px;
 }
+.pay-method >span{
+  font-size: 15px;
+  font-weight: 550;
+}
 .method{
   display: flex;
   flex-flow: row wrap;
@@ -128,15 +206,33 @@ const payData = computed(() => route.query);
 .method-box{
   display: flex;
   align-items: center;
-  width: 230px;
+  width: 350px;
   height: 90px;
   border: 2px solid #ccc;
   border-radius: 5px;
-  margin-inline: 25px;
+  margin-inline-end: 40px;
   margin-block: 10px;
 }
 .method-box >input{
+  zoom:120%;
   margin-left: 15px;
   margin-right: 22px;
+}
+.weixin{
+  margin-left: 10px;
+}
+.tuijian{
+  margin-left: 10px;
+  transform:scale(0.4);
+}
+.dia-box{
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+.dia-box>span{
+  font-weight: 650;
+  margin-bottom: 15px;
 }
 </style>

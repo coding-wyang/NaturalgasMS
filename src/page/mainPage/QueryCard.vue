@@ -66,7 +66,7 @@ const handlePay = () => {
   router.push({
     path: 'PayIndex',
     query: {
-      value: payValue.value,
+      payment: payValue.value,
       cardid: cardData.data[formIndex.value].cardid,
     },
   });

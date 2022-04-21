@@ -11,6 +11,16 @@ const routes = [
     component: () => import('../page/Login.vue'),
   },
   {
+    path: '/PaySucess',
+    name: 'PaySucess',
+    component: () => import('../page/PaySucess.vue'),
+  },
+  {
+    path: '/PayPhone',
+    name: 'PayPhone',
+    component: () => import('../page/PayPhone.vue'),
+  },
+  {
     path: '/Home',
     name: 'Home',
     component: () => import('../page/Home.vue'),
@@ -158,6 +168,8 @@ export const dynamicRouter = [
 ];
 
 router.beforeEach((to, from, next) => {
+  if (to.path === '/PaySucess') return next();
+  if (to.path === '/PayPhone') return next();
   if (to.path === '/Login') return next();
   const isLogin = sessionStorage.getItem('userToken');
   const role = sessionStorage.getItem('userType');

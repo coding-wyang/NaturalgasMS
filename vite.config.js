@@ -8,6 +8,7 @@ import path, { resolve } from 'path';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import eslintPlugin from 'vite-plugin-eslint';
 import { viteMockServe } from 'vite-plugin-mock';
+import { baseURL } from './src/utils/baseUrl';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -32,7 +33,7 @@ export default defineConfig({
     }),
   ],
   server: {
-    host: '127.0.0.1',
+    host: baseURL,
     port: 8900,
     // 是否开启 https
     https: false,

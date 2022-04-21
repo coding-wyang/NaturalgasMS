@@ -2,7 +2,8 @@
 import {
   reactive, ref, computed, onBeforeMount,
 } from 'vue';
-import { ElMessageBox } from 'element-plus';
+import { ElMessageBox, ElMessage } from 'element-plus';
+
 import { userInfoGet, userUpdate, userDelete } from '../../http/api';
 
 onBeforeMount(() => {
@@ -83,7 +84,9 @@ const typeChange = (val) => {
 const updateData = () => {
   dialogVisible.value = false;
   userUpdate(userList.tableData[tableIndex.value]).then((res) => {
-    console.log('updata::', res);
+    if (res.status === 200) {
+      ElMessage.success('更新成功');
+    }
   });
 };
 
@@ -112,29 +115,12 @@ const updateData = () => {
             <span>欠费</span>
           </div>
       </div>
-      <div class="account-info">
-        <div>
-          <svg-icon name='diamond'></svg-icon>
-          <h4>账户信息</h4>
-        </div>
-        <div>
-          <p>元</p>
-          <span>累计扣款</span>
-        </div>
-        <div>
-          <p>元</p>
-          <span>累计缴费</span>
-        </div>
-        <div>
-          <p>元</p>
-          <span>余额</span>
-        </div>
-      </div>
       </div>
       <div class="user-list-box">
         <h4>账号查询</h4>
+        <el-divider/>
         <el-table :data="filterTableData" style="width: 100%; background-color: rgb(248, 248, 248);">
-          <el-table-column label="账号" width="180">
+          <el-table-column label="账号" width="250px">
             <template #default="scope">
               <div style="display: flex; align-items: center">
                 <el-icon><timer /></el-icon>
@@ -142,9 +128,14 @@ const updateData = () => {
                 </div>
                 </template>
               </el-table-column>
-              <el-table-column label="账号等级" width="180px">
+              <el-table-column label="账号等级" width="250px">
                   <template #default="scope">
                     <span> {{ scope.row.type }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="姓名" width="250px">
+                  <template #default="scope">
+                    <span> {{ scope.row.name }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column>
@@ -167,31 +158,62 @@ const updateData = () => {
                 width="40%"
                 :before-close="handleClose"
                 >
-                <span>账号</span>
-                <el-input v-model="userList.tableData[tableIndex].username" type="text" style="width:210px;"/>
-                <span>账号权限</span>
-                <el-select v-model="value" placeholder="Select" size="small" @change="typeChange">
-                  <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                  >
-                </el-option>
-              </el-select>
+                <el-form>
+                  <el-form-item>
+                    <span style="margin-right:30px;">账号</span>
+                    <el-input v-model="userList.tableData[tableIndex].username" type="text" style="width:210px;"/>
+                  </el-form-item>
+                  <el-form-item>
+                    <span style="margin-right:3px;">账号权限</span>
+                      <el-select v-model="value" placeholder="Select" size="small" @change="typeChange">
+                      <el-option
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item>
+                    <span style="margin-right:30px;">姓名</span>
+                    <el-input v-model="userList.tableData[tableIndex].name" type="text" style="width:210px;"/>
+                  </el-form-item>
+                  <el-form-item>
+                    <span style="margin-right:30px;">邮箱</span>
+                    <el-input v-model="userList.tableData[tableIndex].email" type="text" style="width:210px;"/>
+                  </el-form-item>
+                  <el-form-item>
+                    <span style="margin-right:30px;">电话</span>
+                    <el-input v-model="userList.tableData[tableIndex].phone" type="text" style="width:210px;"/>
+                  </el-form-item>
+                </el-form>
                 <template #footer>
-              <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="updateData">确认</el-button>
-      </span>
-    </template>
-  </el-dialog>
+                  <span class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取消</el-button>
+                    <el-button type="primary" @click="updateData">确认</el-button>
+                  </span>
+              </template>
+            </el-dialog>
         </div>
     </el-card>
   </div>
 </template>
 
 <style lang="scss">
+.el-message{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 35px;
+  border-radius: 5px;
+  background: #ffff;
+  color: #51ff01;
+}
 .userinfo-box{
   display: flex;
   justify-content: start;

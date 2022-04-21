@@ -22,6 +22,7 @@ const getLogin = () => {
     if (res.status === 200) {
       store.commit('setCurrentUser', res.type);
       store.commit('setUsername', loginForm.user);
+      store.commit('setName', res.name);
       router.push('/Home');
       sessionStorage.setItem('userName', loginForm.user);
       sessionStorage.setItem('userToken', res.token);
