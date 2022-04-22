@@ -1,7 +1,8 @@
 <script setup>
-import { reactive, defineEmits } from 'vue';
+import { reactive, ref, defineEmits } from 'vue';
 import { useRouter } from 'vue-router';
-import { gasmeterGetAll } from '../../http/api';
+import { ElMessageBox, ElMessage } from 'element-plus';
+import { gasmeterGetAll, meterDelete } from '../../http/api';
 
 const router = useRouter();
 const emits = defineEmits(['addTableTab']);
@@ -10,6 +11,16 @@ const meterAllList = reactive({ data: '' });
 gasmeterGetAll().then((res) => {
   meterAllList.data = res;
 });
+
+const meterid = ref();
+
+const fliterData = () => {
+  meterAllList.data.forEach((e) => {
+    if (e.meterid === meterid.value) {
+      meterAllList.data.splice(0, meterAllList.data.length, e);
+    }
+  });
+};
 const handleMeter = (id) => {
   emits('addTableTab', '抄表');
   router.push({
@@ -17,6 +28,20 @@ const handleMeter = (id) => {
     query: {
       id,
     },
+  });
+};
+
+const deleteMeter = (id) => {
+  ElMessageBox.confirm('此操作将永久删除该气表，是否继续？', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).then(() => {
+    meterDelete({ meterid: id }).then((res) => {
+      if (res.status === 200) {
+        ElMessage.success('删除成功');
+      }
+    });
   });
 };
 
@@ -29,8 +54,8 @@ const handleMeter = (id) => {
       <h5>设备总览</h5>
       <el-form style="margin-left:20px; margin-top:-5px;">
         <el-form-item>
-          <el-input style="width: 300px" placeholder="请输入气表ID"></el-input>
-        <el-button style="width:70px;background: #87a0cf; color: #ffff; margin-left:10px;">查询</el-button>
+          <el-input v-model='meterid' style="width: 300px" placeholder="请输入气表ID"></el-input>
+        <el-button @click="fliterData" style="width:70px;background: #87a0cf; color: #ffff; margin-left:10px;">查询</el-button>
         </el-form-item>
       </el-form>
       </div>
@@ -40,16 +65,16 @@ const handleMeter = (id) => {
           <svg-icon class="gas-icon" name="user"/>
         <p>气表ID: {{item.meterid}}</p>
         <p>气卡ID: {{item.cardid}}</p>
-        <p>余量: {{item.surplus}} 立方</p>
         <p>累计用量: {{item.cumulative}} 立方</p>
-        <el-button style="width: 100px; margin-left: 60%;margin-top: 50px;" @click ='handleMeter(item.meterid)'>抄表</el-button>
+        <el-button style="width: 100px; margin-left: 60%;margin-top: 40px;" @click ='handleMeter(item.meterid)'>抄表</el-button>
+        <el-button style="width: 100px; margin-left: 60%;margin-top: 6px;" @click ='deleteMeter(item.meterid)'>删除</el-button>
         </div>
       </div>
     </div>
   </el-card>
 </template>
 
-<style scoped>
+<style lang='scss'>
 .gas-box{
   display: flex;
   flex-direction: row;
@@ -83,5 +108,49 @@ const handleMeter = (id) => {
 .meter-header-box{
   display:flex;
   flex-flow: row nowrap;
+}
+.el-message{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 35px;
+  border-radius: 5px;
+  background: #ffff;
+  color: #51ff01;
+}
+.el-overlay{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+.el-icon{
+  height: 1.4em;
+  padding-inline: 5px;
+}
+.el-message-box{
+  width: 300px;
+  height: 130px;
+  border-radius: 5px;
+  background: #ffff;
+  color: #db984c;
+}
+.el-message-box__headerbtn{
+  display: none;
+}
+.el-message-box__container{
+  display: flex;
+  padding-block: 30px;
+}
+.el-message-box__btns{
+  position: relative;
+  left: 90px;
+}
+.el-message-box__message{
+  margin: 0 auto;
 }
 </style>

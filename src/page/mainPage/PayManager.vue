@@ -120,7 +120,7 @@ const pie = () => {
 
 <template>
   <el-card>
-    <h5>个人信息</h5>
+    <h5>用户：{{name}}</h5>
     <el-divider/>
     <div class="pay-box">
       <div class="left-top-box">

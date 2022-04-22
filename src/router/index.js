@@ -25,17 +25,27 @@ const routes = [
     name: 'Home',
     component: () => import('../page/Home.vue'),
     meta: {
-      roles: ['0', '1'],
+      roles: ['0', '1', '2'],
       keepAlive: true,
     },
     children: [
       {
         path: '',
+        name: 'First',
         meta: {
           title: '监测信息',
           keepAlive: true,
         },
         component: () => import('../page/mainPage/MonitorInfo.vue'),
+      },
+      {
+        path: 'UserInfo',
+        name: 'UserInfo',
+        meta: {
+          title: '个人信息',
+          keepAlive: true,
+        },
+        component: () => import('../page/mainPage/UserInfo.vue'),
       },
       {
         path: 'Monitor',
@@ -68,10 +78,19 @@ const routes = [
         path: 'Gas',
         name: 'Gas',
         meta: {
-          title: '燃气管理',
+          title: '气表管理',
           keepAlive: true,
         },
         component: () => import('../page/mainPage/GasManager.vue'),
+      },
+      {
+        path: 'AddMeter',
+        name: 'AddMeter',
+        meta: {
+          title: '添加气表',
+          keepAlive: true,
+        },
+        component: () => import('../page/mainPage/AddMeter.vue'),
       },
       {
         path: 'Pay',
@@ -146,6 +165,24 @@ const routes = [
         component: () => import('../page/mainPage/CardMessage.vue'),
       },
       {
+        path: 'GasPrice',
+        name: 'GasPrice',
+        meta: {
+          title: '燃气管理',
+          keepAlive: true,
+        },
+        component: () => import('../page/mainPage/GasPrice.vue'),
+      },
+      {
+        path: 'AddGas',
+        name: 'AddGas',
+        meta: {
+          title: '添加燃气',
+          keepAlive: true,
+        },
+        component: () => import('../page/mainPage/AddGas.vue'),
+      },
+      {
         path: 'PayIndex',
         name: 'PayIndex',
         meta: {
@@ -154,6 +191,7 @@ const routes = [
         },
         component: () => import('../page/mainPage/PayIndex.vue'),
       },
+
     ],
   },
 ];
@@ -166,13 +204,15 @@ const router = createRouter({
 export const dynamicRouter = [
   { path: '/Home', name: 'Home', component: () => import('../page/Home.vue') },
 ];
-
 router.beforeEach((to, from, next) => {
+  const isLogin = sessionStorage.getItem('userToken');
+  const role = sessionStorage.getItem('userType');
+  if (to.name === 'First' && role === '2') {
+    return next({ name: 'UserInfo' });
+  }
   if (to.path === '/PaySucess') return next();
   if (to.path === '/PayPhone') return next();
   if (to.path === '/Login') return next();
-  const isLogin = sessionStorage.getItem('userToken');
-  const role = sessionStorage.getItem('userType');
   if (!isLogin) return next('/Login');
   if (to.meta.roles.includes(role)) {
     return next();

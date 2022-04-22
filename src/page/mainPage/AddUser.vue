@@ -8,6 +8,9 @@ const addForm = reactive({
   user: '',
   pass: '',
   type: '', // 权限
+  name: '',
+  email: '',
+  phone: '',
 });
 
 /* 校验规则 */
@@ -17,6 +20,19 @@ const rules = reactive({
     {
       min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur',
     }],
+  type: [{ required: true, message: '请选择身份', trigger: 'blur' }],
+  name: [{ required: true, message: '请输入您的姓名', trigger: 'blur' }],
+  email: [{ required: true, message: '请输入邮箱', trigger: 'blur' },
+    {
+      type: 'email',
+      message: '请输入正确的邮箱地址',
+      trigger: ['blur', 'change'],
+    }],
+  phone: [{ required: true, message: '请输入电话', trigger: 'blur' },
+    {
+      pattern: /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/,
+      message: '请输入正确的手机号码或者座机号',
+    }],
 });
 
 /* el-select 的参数 */
@@ -24,18 +40,19 @@ const value = ref('');
 const options = [
   {
     value: '0',
-    label: '0',
+    label: '燃气公司',
   },
   {
     value: '1',
-    label: '1',
+    label: '物业管理员',
   },
   {
     value: '2',
-    label: '2',
+    label: '用户',
   },
 ];
 
+const ruleFormRef = ref();
 /* select value改变时更改选中权限 */
 const typeChange = (val) => {
   addForm.type = val;
@@ -51,7 +68,7 @@ const addUser = (val) => {
         }
       });
     } else {
-      console.log('error submit!');
+      ElMessage.error('添加失败');
     }
   });
 };
@@ -61,6 +78,7 @@ const addUser = (val) => {
   <el-card>
     <div class="add-user">
       <h4>添加用户</h4>
+      <el-divider></el-divider>
       <el-form label-width="90px" :model="addForm" :rules="rules" ref="ruleFormRef"  style="width: 250px;">
           <el-form-item label="账号" prop="user" >
             <el-input v-model="addForm.user" />
@@ -79,10 +97,35 @@ const addUser = (val) => {
                 </el-option>
               </el-select>
           </el-form-item>
+          <el-form-item label="姓名" prop="name" >
+            <el-input v-model="addForm.name"/>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email" >
+            <el-input v-model="addForm.email"/>
+          </el-form-item>
+          <el-form-item label="电话" prop="phone" >
+            <el-input v-model="addForm.phone"/>
+          </el-form-item>
           <div class="login-button">
-            <el-button  type="primary" style="width:150px;" @click="addUser(ruleFormRef)">确认添加</el-button>
+            <el-button  type="primary" style="width:150px;margin-left:90px;" @click="addUser(ruleFormRef)">确认添加</el-button>
           </div>
         </el-form>
     </div>
   </el-card>
 </template>
+
+<style lang="">
+  .el-message{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 35px;
+  border-radius: 5px;
+  background: #ffff;
+  color: #b2cf87;
+}
+</style>

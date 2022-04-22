@@ -16,24 +16,31 @@ const editableTabs = ref([
 let tabIndex = 0;
 const showTab = ref('监测信息'); // 控制main页面显示tab对应的内容
 const userType = computed(() => store.state.currentUser);
+if (userType.value === '2') {
+  editableTabs.value = [{ title: '个人信息', name: '0' }];
+  showTab.value = '个人信息';
+}
 
 const routerList = ref({
   managerList: {
     监测信息: 'Monitor',
     用户管理: 'User',
     添加用户: 'AddUser',
-    燃气管理: 'Gas',
+    气表管理: 'Gas',
     抄表: 'MeterRead',
     抄表记录: 'ReadRecord',
+    添加气表: 'AddMeter',
     缴费管理: 'Pay',
     气卡管理: 'Card',
     气卡信息: 'CardMessage',
     查询气卡: 'QueryCard',
     添加气卡: 'AddCard',
+    缴费业务: 'Pay',
+    个人信息: 'UserInfo',
+    燃气管理: 'GasPrice',
+    添加燃气: 'AddGas',
   },
-  userList: {
-    缴费业务: '1',
-  },
+
 });
 
 onMounted(() => {
@@ -48,15 +55,15 @@ const asideList = ref(
   [
     '监测信息',
     '用户管理',
-    '燃气管理',
+    '气表管理',
     '缴费管理',
     '气卡管理',
+    '燃气管理',
   ],
-  },
-  {
     /* 用户 */
     userList:
     [
+      '个人信息',
       '缴费业务',
     ],
   },
@@ -129,7 +136,7 @@ const changeTab = (eve) => {
       <el-aside width="100px">
         <div class="aside-box">
           <!-- 管理员侧边栏 -->
-          <ul class="ul-box" v-if="userType ==='0'">
+          <ul class="ul-box" v-if="userType ==='0' || userType === '1'">
             <li>
               <div class="icon-monito" @click='addTableTab(asideList.managerList[0], routerList.managerList.monitor)'>
                 <svg-icon class="aside-icon" name="monitor"/>
@@ -138,7 +145,7 @@ const changeTab = (eve) => {
             </li>
             <li>
               <el-dropdown @command="handleCommand($event)" placement="bottom-end" size="small">
-              <div class="icon-manager" @click='addTableTab(asideList.managerList[1], routerList.managerList.user)'>
+              <div class="icon-manager" @click='addTableTab(asideList.managerList[1])'>
                 <svg-icon class="aside-icon" name="star"/>
               </div>
               <template #dropdown>
@@ -152,28 +159,29 @@ const changeTab = (eve) => {
             </li>
             <li>
               <el-dropdown  @command="handleCommand($event)" placement="bottom-end" size="small">
-              <div class="icon-fire" @click='addTableTab(asideList.managerList[2],routerList.managerList.gas)'>
+              <div class="icon-fire" @click='addTableTab(asideList.managerList[2])'>
                 <svg-icon class="aside-icon" name="gas"/>
               </div >
               <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item command='燃气管理'>燃气管理</el-dropdown-item>
+                    <el-dropdown-item command='气表管理'>气表管理</el-dropdown-item>
                     <el-dropdown-item command='抄表'>抄表</el-dropdown-item>
                     <el-dropdown-item command='抄表记录'>抄表记录</el-dropdown-item>
+                    <el-dropdown-item command='添加气表'>添加气表</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
                 </el-dropdown>
-              <p>燃气管理</p>
+              <p>气表管理</p>
             </li>
             <li>
-              <div class="icon-pay" @click='addTableTab(asideList.managerList[3],routerList.managerList.pay)'>
+              <div class="icon-pay" @click='addTableTab(asideList.managerList[3])'>
                 <svg-icon class="aside-icon" name="diamond"/>
               </div >
               <p>缴费管理</p>
             </li>
             <li>
               <el-dropdown  @command="handleCommand($event)" placement="bottom-end" size="small">
-              <div class="icon-slid" @click='addTableTab(asideList.managerList[4],routerList.managerList.card)'>
+              <div class="icon-slid" @click='addTableTab(asideList.managerList[4])'>
                 <svg-icon class="aside-icon" name="sliders"/>
               </div >
               <template #dropdown>
@@ -187,10 +195,30 @@ const changeTab = (eve) => {
               </el-dropdown>
               <p>气卡管理</p>
             </li>
+            <li>
+              <el-dropdown @command="handleCommand($event)" placement="bottom-end" size="small">
+              <div class="icon-manager" @click='addTableTab(asideList.managerList[5])'>
+                <svg-icon class="aside-icon" name="star"/>
+              </div>
+              <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command='燃气管理'>燃气管理</el-dropdown-item>
+                    <el-dropdown-item command='添加燃气'>添加燃气</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+              <p>燃气管理</p>
+            </li>
           </ul>
-          <ul class="ul-box" v-if="userType ==='1'">
+          <ul class="ul-box" v-if="userType ==='2'">
             <li>
                 <div class="icon-pay" @click='addTableTab(asideList.userList[0])'>
+                  <svg-icon class="aside-icon" name="cloud"/>
+                </div >
+              <p>个人信息</p>
+            </li>
+            <li>
+                <div class="icon-pay" @click='addTableTab(asideList.userList[1])'>
                   <svg-icon class="aside-icon" name="diamond"/>
                 </div >
               <p>缴费业务</p>
@@ -201,7 +229,7 @@ const changeTab = (eve) => {
       <el-container>
         <el-header>
           <div class="header-title">
-            <h3>智慧天然气一体化业务集成系统</h3>
+            <h3>智慧燃气一体化业务集成系统</h3>
           </div>
         </el-header>
         <el-divider style="height:0px; margin:0;"></el-divider>

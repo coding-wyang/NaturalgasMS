@@ -33,7 +33,7 @@ const line = () => {
   const data = new Array(12).fill(0);
   const indexArr = Object.keys(chartData.value);
   indexArr.forEach((element) => {
-    const index = Number(element);
+    const index = Number(element) - 1;
     data[index] = chartData.value[element];
   });
   const myChart = echarts.init(document.getElementById('readEcharts'));

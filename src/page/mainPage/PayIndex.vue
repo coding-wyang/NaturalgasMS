@@ -88,7 +88,7 @@ const closeDia = () => {
             <img class='tuijian' src='../../assets/tuijian.png'>
           </div>
           <div class='method-box'>
-            <input type="radio" id="huey" name="contact" value="huey" checked>
+            <input type="radio" id="huey" name="contact" value="huey">
             <img class='weixin' src="../../assets/weixin.png">
           </div>
           </div>

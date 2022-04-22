@@ -1,22 +1,76 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import {
+  ref, onMounted, computed, reactive,
+} from 'vue';
 import { useStore } from 'vuex';
+import * as echarts from 'echarts';
 import { cardGetById } from '../../http/api';
 
 const store = useStore();
 
 const cardList = ref();
 const username = computed(() => store.state.userName);
+const name = computed(() => store.state.name);
+const data = reactive([]);
 onMounted(() => {
   cardGetById(username.value).then((res) => {
     cardList.value = res;
+    res.forEach((element) => {
+      data.push({ value: Number(element.balance.$numberDecimal), name: `卡号:${element.cardid}` });
+    });
   });
+  setTimeout(() => {
+    pie();
+  }, 100);
 });
+
+const pie = () => {
+  const myChart = echarts.init(document.getElementById('fenbuBing'));
+  myChart.setOption({
+    title: {
+      text: '个人用户气卡余额(实时)',
+      subtext: '单位/元',
+      left: 'center',
+    },
+    tooltip: {
+      trigger: 'item',
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left',
+    },
+    series: [
+      {
+        name: '缴费信息',
+        type: 'pie',
+        radius: '50%',
+        data,
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          },
+        },
+      },
+    ],
+  });
+  window.onresize = function () {
+    // 自适应大小, 不用的话不会自适应大小。
+    myChart.resize();
+  };
+};
 
 </script>
 
 <template>
   <el-card>
+    <h5>用户：{{name}}</h5>
+    <div class="card-top-box">
+        <div id='fenbuBing' :style="{ width: '100%', height: '300px' }"></div>
+      </div>
+      <h5>气卡预览</h5>
+      <el-divider/>
     <div class="card-message-box">
       <div class="card-info-box">
         <div class="message-info" v-for="(item) in cardList" :key='item.index' >

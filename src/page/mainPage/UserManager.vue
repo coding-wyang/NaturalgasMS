@@ -45,7 +45,9 @@ const handleDelete = (row) => {
     type: 'warning',
   }).then(() => {
     userDelete(row).then((res) => {
-      console.log('delete::', res);
+      if (res.status === 200) {
+        ElMessage.success('删除成功');
+      }
     });
   });
 };
