@@ -1,8 +1,19 @@
 <script setup>
-import { reactive, ref } from 'vue';
-import { ElMessage } from 'element-plus';
+import {
+  reactive, ref, onMounted, computed,
+} from 'vue';
+import { useStore } from 'vuex';
 import { userAdd } from '../../http/api';
 
+const store = useStore();
+const userType = computed(() => store.state.currentUser);
+
+onMounted(() => {
+  if (userType.value === '1') {
+    options.splice(0, 1);
+    console.log('ss', options);
+  }
+});
 /* 添加表单 */
 const addForm = reactive({
   user: '',
@@ -37,7 +48,7 @@ const rules = reactive({
 
 /* el-select 的参数 */
 const value = ref('');
-const options = [
+const options = reactive([
   {
     value: '0',
     label: '燃气公司',
@@ -50,7 +61,7 @@ const options = [
     value: '2',
     label: '用户',
   },
-];
+]);
 
 const ruleFormRef = ref();
 /* select value改变时更改选中权限 */
@@ -64,10 +75,12 @@ const addUser = (val) => {
     if (valid) {
       userAdd(addForm).then((res) => {
         if (res.status === 200) {
+          // eslint-disable-next-line no-undef
           ElMessage.success('添加成功');
         }
       });
     } else {
+      // eslint-disable-next-line no-undef
       ElMessage.error('添加失败');
     }
   });
@@ -115,17 +128,5 @@ const addUser = (val) => {
 </template>
 
 <style lang="">
-  .el-message{
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 50%;
-  left: 50%;
-  width: 120px;
-  height: 35px;
-  border-radius: 5px;
-  background: #ffff;
-  color: #b2cf87;
-}
+
 </style>

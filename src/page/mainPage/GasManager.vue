@@ -1,9 +1,15 @@
 <script setup>
-import { reactive, ref, defineEmits } from 'vue';
+import {
+  reactive, ref, defineEmits, computed, onMounted,
+} from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessageBox, ElMessage } from 'element-plus';
-import { gasmeterGetAll, meterDelete } from '../../http/api';
+import { useStore } from 'vuex';
+import { gasmeterGetAll, meterDelete, cardGetById } from '../../http/api';
 
+const store = useStore();
+const userType = computed(() => store.state.currentUser);
+const username = computed(() => store.state.userName);
+const cardids = reactive([]);
 const router = useRouter();
 const emits = defineEmits(['addTableTab']);
 const meterAllList = reactive({ data: '' });
@@ -11,10 +17,38 @@ const meterAllList = reactive({ data: '' });
 gasmeterGetAll().then((res) => {
   meterAllList.data = res;
 });
+onMounted(() => {
+  if (userType.value === '2') {
+    cardGetById(username.value).then((res) => {
+      res.forEach((e) => {
+        cardids.push(e.cardid);
+      });
+    });
+    setTimeout(() => {
+      fliterUser();
+    }, 30);
+  }
+});
+
+const fliterUser = () => {
+  console.log('res:::', cardids);
+  for (let i = 0; i < meterAllList.data.length; i++) {
+    if (!cardids.includes(meterAllList.data[i].cardid)) {
+      meterAllList.data.splice(i, 1);
+      i--;
+    }
+  }
+  /* meterAllList.data.forEach((e, index) => {
+    if (!cardids.includes(e.cardid)) {
+      meterAllList.data.splice(index, 1);
+    }
+  }); */
+};
 
 const meterid = ref();
 
 const fliterData = () => {
+  console.log(meterAllList.data);
   meterAllList.data.forEach((e) => {
     if (e.meterid === meterid.value) {
       meterAllList.data.splice(0, meterAllList.data.length, e);
@@ -32,6 +66,7 @@ const handleMeter = (id) => {
 };
 
 const deleteMeter = (id) => {
+  // eslint-disable-next-line no-undef
   ElMessageBox.confirm('此操作将永久删除该气表，是否继续？', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
@@ -39,6 +74,7 @@ const deleteMeter = (id) => {
   }).then(() => {
     meterDelete({ meterid: id }).then((res) => {
       if (res.status === 200) {
+        // eslint-disable-next-line no-undef
         ElMessage.success('删除成功');
       }
     });
@@ -67,7 +103,7 @@ const deleteMeter = (id) => {
         <p>气卡ID: {{item.cardid}}</p>
         <p>累计用量: {{item.cumulative}} 立方</p>
         <el-button style="width: 100px; margin-left: 60%;margin-top: 40px;" @click ='handleMeter(item.meterid)'>抄表</el-button>
-        <el-button style="width: 100px; margin-left: 60%;margin-top: 6px;" @click ='deleteMeter(item.meterid)'>删除</el-button>
+        <el-button style="width: 100px; margin-left: 60%;margin-top: 6px;" @click ='deleteMeter(item.meterid)' v-if="userType !=='2'">删除</el-button>
         </div>
       </div>
     </div>
@@ -109,48 +145,5 @@ const deleteMeter = (id) => {
   display:flex;
   flex-flow: row nowrap;
 }
-.el-message{
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 50%;
-  left: 50%;
-  width: 120px;
-  height: 35px;
-  border-radius: 5px;
-  background: #ffff;
-  color: #51ff01;
-}
-.el-overlay{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-}
-.el-icon{
-  height: 1.4em;
-  padding-inline: 5px;
-}
-.el-message-box{
-  width: 300px;
-  height: 130px;
-  border-radius: 5px;
-  background: #ffff;
-  color: #db984c;
-}
-.el-message-box__headerbtn{
-  display: none;
-}
-.el-message-box__container{
-  display: flex;
-  padding-block: 30px;
-}
-.el-message-box__btns{
-  position: relative;
-  left: 90px;
-}
-.el-message-box__message{
-  margin: 0 auto;
-}
+
 </style>

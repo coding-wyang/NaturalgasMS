@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { ElMessage } from 'element-plus';
 import { gasGet, gasmeterGet, meterRead } from '../../http/api';
 
 const route = useRoute();
@@ -90,8 +89,10 @@ const handleRead = () => {
     cumulative: lastCumulative.value + diff.value,
   }).then((res) => {
     if (res.status === 200) {
+      // eslint-disable-next-line no-undef
       ElMessage.success('抄表成功');
     } else if (res.status === 304) {
+      // eslint-disable-next-line no-undef
       ElMessage.warning('请勿重复抄表');
     }
   });
@@ -130,19 +131,6 @@ const handleRead = () => {
 </template>
 
 <style >
-.el-message{
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 50%;
-  left: 50%;
-  width: 120px;
-  height: 35px;
-  border-radius: 5px;
-  background: #ffff;
-  color: #b2cf87;
-}
 .meter-box>p{
   font-weight: 550;
   margin-block: 10px;

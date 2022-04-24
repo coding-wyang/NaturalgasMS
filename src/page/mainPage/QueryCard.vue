@@ -1,8 +1,11 @@
 <script setup>
-import { reactive, ref } from 'vue';
-import { ElMessageBox } from 'element-plus';
+import { reactive, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import { cardQuery, cardDelete, cardUserUpdate } from '../../http/api';
+
+const store = useStore();
+const userType = computed(() => store.state.currentUser);
 
 const router = useRouter();
 const payValue = ref();
@@ -23,14 +26,13 @@ const formIndex = ref('');
 const onSubmit = () => {
   if (formInline.cardId !== '' || formInline.name !== '') {
     cardQuery(formInline).then((res) => {
-      console.log('asdasd', res);
       cardData.data = res.data;
-      console.log(cardData.data);
     });
   }
 };
 /* 删除card */
 const deleteCard = (index) => {
+  // eslint-disable-next-line no-undef
   ElMessageBox.confirm('此操作将永久删除该账号，是否继续？', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
@@ -58,7 +60,8 @@ const changeUser = () => {
       }
     });
   } else {
-    ElMessageBox.confirm('修改后的户主不得与原户主一致');
+    // eslint-disable-next-line no-undef
+    ElMessage.warning('修改后的户主不得与原户主一致');
   }
 };
 const dialogvisible = ref(false);
@@ -79,7 +82,7 @@ const handlePay = () => {
     <el-form-item label="气卡ID">
       <el-input v-model="formInline.cardId"></el-input>
     </el-form-item>
-    <el-form-item label="卡主姓名">
+    <el-form-item label="卡主姓名" v-if="userType !=='2'">
       <el-input v-model="formInline.name"></el-input>
     </el-form-item>
     <el-form-item>
@@ -99,16 +102,16 @@ const handlePay = () => {
   >
     <el-descriptions-item label="卡主姓名">{{item.name}}</el-descriptions-item>
     <el-descriptions-item label="ID">{{item.cardid}}</el-descriptions-item>
-    <el-descriptions-item label="联系方式" :span="3"></el-descriptions-item>
+    <el-descriptions-item label="户主ID" :span="2">{{item.username}}</el-descriptions-item>
     <el-descriptions-item label="状态" >{{item.state}}</el-descriptions-item>
     <el-descriptions-item label="余额">
       <el-tag size="normal">{{Number(item.balance.$numberDecimal).toFixed(2)}} 元</el-tag>
     </el-descriptions-item>
-    <el-descriptions-item label="累计用气量">{{item.cumulative}}</el-descriptions-item>
+    <el-descriptions-item label="累计用气量">{{`${item.cumulative}立方`}}</el-descriptions-item>
     <el-descriptions-item label="操作">
-        <el-button type="primary" @click='editCard(index)'>更换户主</el-button>
+        <el-button v-if="userType !=='2'" type="primary" @click='editCard(index)'>更换户主</el-button>
         <el-button type="success" @click='dialogvisible = true; formIndex = index;'>缴费</el-button>
-        <el-button type="error" @click='deleteCard(index)' style="color: white">删除</el-button>
+        <el-button v-if="userType !=='2'" type="error" @click='deleteCard(index)' style="color: white">删除</el-button>
     </el-descriptions-item>
   </el-descriptions>
   </div>
@@ -134,7 +137,7 @@ const handlePay = () => {
       <el-input v-model="editInfo.newId"></el-input>
     </el-form-item>
   </el-form>
-  <el-button type="success" @click="changeUser">确定</el-button></el-dialog>
+  <el-button style='margin-left: 45%;' type="success" @click="changeUser">确定</el-button></el-dialog>
   </div>
 </el-card>
 </template>

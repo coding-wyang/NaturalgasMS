@@ -71,4 +71,8 @@ export const gasmeterAdd = (data) => http.get('/gasmeter/add', { data });
 export const meterDelete = (data) => http.get('/gasmeter/delete', { data });
 
 export const gasUpdate = (data) => http.get('/gastype/update', { data });
+
+export const gastypeDelete = (data) => http.get('/gastype/delete', { data });
+
+export const userRe = (data) => http.get('/user/re', { data });
 export const gasGet = () => fetch('/api/gasGet');

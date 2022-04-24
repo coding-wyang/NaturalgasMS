@@ -15,6 +15,7 @@
     "qrcode": "^1.5.0",
     "qrcode.vue": "^3.3.3",
     "sass": "^1.49.0",
+    "vite-plugin-components": "^0.13.3",
     "vue": "^3.2.25",
     "vue-router": "^4.0.12",
     "vuex": "^4.0.2"

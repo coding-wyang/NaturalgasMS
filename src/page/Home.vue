@@ -1,6 +1,6 @@
 <script setup>
 import {
-  ref, computed, onMounted,
+  ref, reactive, computed, onMounted,
 } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
@@ -16,11 +16,16 @@ const editableTabs = ref([
 let tabIndex = 0;
 const showTab = ref('监测信息'); // 控制main页面显示tab对应的内容
 const userType = computed(() => store.state.currentUser);
-if (userType.value === '2') {
+const name = computed(() => store.state.name);
+const sessionType = sessionStorage.getItem('userType');
+if (userType.value === '2' || sessionType === '2') {
+  console.log('res', 1);
   editableTabs.value = [{ title: '个人信息', name: '0' }];
   showTab.value = '个人信息';
 }
 
+const users = reactive(['燃气公司', '物业', '用户']);
+const imgUrl = reactive(['https://avatars.githubusercontent.com/u/63920399?s=200&v=4', 'https://avatars.githubusercontent.com/u/29560987?v=4', 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png']);
 const routerList = ref({
   managerList: {
     监测信息: 'Monitor',
@@ -39,6 +44,7 @@ const routerList = ref({
     个人信息: 'UserInfo',
     燃气管理: 'GasPrice',
     添加燃气: 'AddGas',
+    气表信息: 'Gas',
   },
 
 });
@@ -65,6 +71,8 @@ const asideList = ref(
     [
       '个人信息',
       '缴费业务',
+      '气卡信息',
+      '气表信息',
     ],
   },
 );
@@ -129,11 +137,23 @@ const changeTab = (eve) => {
   const rLink = routerList.value.managerList[eve.target.innerText];
   router.push(`/Home/${rLink}`);
 };
+
+const outLogin = () => {
+  // eslint-disable-next-line no-undef
+  ElMessageBox.confirm('是否退出登录？', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).then(() => {
+    sessionStorage.clear();
+    router.push({ path: 'Login' });
+  });
+};
 </script>
 
 <template>
   <el-container>
-      <el-aside width="100px">
+      <el-aside width="200px">
         <div class="aside-box">
           <!-- 管理员侧边栏 -->
           <ul class="ul-box" v-if="userType ==='0' || userType === '1'">
@@ -195,7 +215,7 @@ const changeTab = (eve) => {
               </el-dropdown>
               <p>气卡管理</p>
             </li>
-            <li>
+            <li v-if="userType ==='0'">
               <el-dropdown @command="handleCommand($event)" placement="bottom-end" size="small">
               <div class="icon-manager" @click='addTableTab(asideList.managerList[5])'>
                 <svg-icon class="aside-icon" name="star"/>
@@ -212,7 +232,7 @@ const changeTab = (eve) => {
           </ul>
           <ul class="ul-box" v-if="userType ==='2'">
             <li>
-                <div class="icon-pay" @click='addTableTab(asideList.userList[0])'>
+                <div class="icon-manager" @click='addTableTab(asideList.userList[0])'>
                   <svg-icon class="aside-icon" name="cloud"/>
                 </div >
               <p>个人信息</p>
@@ -223,18 +243,57 @@ const changeTab = (eve) => {
                 </div >
               <p>缴费业务</p>
             </li>
+            <li>
+              <el-dropdown @command="handleCommand($event)" placement="bottom-end" size="small">
+              <div class="icon-slid" @click='addTableTab(asideList.userList[2])'>
+                <svg-icon class="aside-icon" name="chain_link"/>
+              </div>
+              <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command='气卡信息'>气卡信息</el-dropdown-item>
+                    <el-dropdown-item command='查询气卡'>查询气卡</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+              <p>气卡信息</p>
+            </li>
+            <li>
+              <el-dropdown @command="handleCommand($event)" placement="bottom-end" size="small">
+              <div class="icon-fire" @click='addTableTab(asideList.userList[3])'>
+                <svg-icon class="aside-icon" name="cog_12"/>
+              </div>
+              <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command='气表信息'>气表信息</el-dropdown-item>
+                    <el-dropdown-item command='抄表'>抄表</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+              <p>气表信息</p>
+            </li>
           </ul>
         </div>
       </el-aside>
       <el-container>
-        <el-header>
+        <el-header height="90px">
           <div class="header-title">
             <h3>智慧燃气一体化业务集成系统</h3>
+            <div class='avatar-box-style'>
+              <span>{{users[Number(sessionType)]}}</span>
+              <el-avatar
+              :src=imgUrl[Number(sessionType)]
+              />
+              <span>{{name}}</span>
+              <div>
+                <svg-icon @click='outLogin' name="out-login"/>
+              </div>
+          </div>
           </div>
         </el-header>
         <el-divider style="height:0px; margin:0;"></el-divider>
         <el-main>
-          <el-tabs
+          <div class='tab-header-box'>
+            <el-tabs
           v-model="editableTabsValue"
           type="card"
           editable
@@ -248,7 +307,8 @@ const changeTab = (eve) => {
             :name="item.name"
             >
             </el-tab-pane>
-          </el-tabs>
+          </el-tabs >
+          </div>
           <div class='child'>
             <keep-alive>
               <router-view  @addTableTab='addTableTab'/>
@@ -261,7 +321,7 @@ const changeTab = (eve) => {
 
 <style lang="scss">
 body{
-  height: 927px;
+  height: 935px;
 }
 #app{
   height: 100%;
@@ -270,8 +330,8 @@ body{
   height: 100%;
 }
 .el-dropdown__popper{
-  left: 140px !important;
-  margin: -50px !important;
+  left: 200px !important;
+  margin: -60px !important;
 }
 .el-popper__arrow{
   left: -5px !important;
@@ -283,71 +343,104 @@ body{
   background: #2d2e36;
 }
 .aside-icon{
-  height: 35px;
-  width: 35px;
-  margin: 8px;
+  height: 50px;
+  width: 50px;
+  margin: 10px;
   color: #ffffff;
 }
 .ul-box{
-  padding-block-start: 68px;
+  padding-block-start: 50px;
   height: 800px;
 }
 .ul-box >li{
-  padding-block-start: 5px;
+  padding-block-start: 33px;
   height: 100px;
   text-align: center;
 }
 .icon-monito{
   margin: 0 auto;
-  height: 50px;
-  width: 50px;
-  border-radius:8px;
+  height: 70px;
+  width: 70px;
+  border-radius:20px;
   background: #5b63d6;
 }
 .icon-manager{
   margin: 0 auto;
-  height: 50px;
-  width: 50px;
-  border-radius: 7px;
+  height: 70px;
+  width: 70px;
+  border-radius:20px;
   background: #c6e6e8;
 }
 .icon-fire{
   margin: 0 auto;
-  height: 50px;
-  width: 50px;
-  border-radius: 5px;
+  height: 70px;
+  width: 70px;
+  border-radius:20px;
   background: #87a0cf;
 }
 .icon-pay{
   margin: 0 auto;
-  height: 50px;
-  width: 50px;
-  border-radius: 5px;
+  height: 70px;
+  width: 70px;
+  border-radius:20px;
   background: #b2cf87;
 }
 
 .icon-slid{
   margin: 0 auto;
-  height: 50px;
-  width: 50px;
-  border-radius: 5px;
+  height: 70px;
+  width: 70px;
+  border-radius:20px;
   background: #cf87bf;
 }
 
 .ul-box >li>p{
-  padding-block-start: 7px;
+  padding-block-start: 10px;
   color: aliceblue;
   height: 20px;
-  font-size: 13px;
+
+  font-size: 14px;
 }
 .header-title{
-  margin: 10px auto;
+  margin: 20px auto;
   width: 400px;
-  height: 30px;
+  height: 40px;
   background: #f7cfba;
   text-align: center;
-  border-radius: 7px;
+  border-radius: 20px;
   box-shadow: 5px 5px 6px #ccc ;
+}
+.header-title>h3{
+  padding-top: 6px;
+}
+.avatar-box-style{
+  display: flex;
+  flex: row nowrap;
+  position: absolute;
+  align-items: center;
+  right: 4%;
+  top: 10px;
+}
+.avatar-box-style>:nth-child(1){
+  font-size: 15px;
+  margin-inline-end: 20px;
+}
+.avatar-box-style>:nth-child(2){
+  transform: scale(0.5);
+  margin-inline-end: 20px;
+}
+.avatar-box-style>:nth-child(3){
+  font-size: 15px;
+  font-weight: 600;
+  margin-inline-end: 15px;
+}
+.avatar-box-style>div{
+  font-size: 20px;
+  margin-top: -5px;
+  cursor:pointer;
+}
+.avatar-box-style>:nth-child(4) :hover{
+  transform: scale(1.2);
 }
 
 #app .el-container .el-header{

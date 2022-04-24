@@ -83,7 +83,7 @@ const addCard = (val) => {
             <el-input v-model="addCardForm.username"/>
           </el-form-item>
           <div class="login-button">
-            <el-button  type="primary" style="width:150px;" @click="addCard(ruleFormRef)">新建并缴费</el-button>
+            <el-button  type="primary" style="width:150px;margin-left:100px;" @click="addCard(ruleFormRef)">新建并缴费</el-button>
           </div>
         </el-form>
         </div>
@@ -91,17 +91,5 @@ const addCard = (val) => {
 </template>
 
 <style lang="scss">
-.el-message{
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 50%;
-  left: 50%;
-  width: 120px;
-  height: 35px;
-  border-radius: 5px;
-  background: #ffff;
-  color: #b2cf87;
-}
+
 </style>

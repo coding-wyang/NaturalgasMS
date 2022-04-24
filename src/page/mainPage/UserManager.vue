@@ -1,13 +1,20 @@
+/* eslint-disable no-undef */
 <script setup>
 import {
   reactive, ref, computed, onBeforeMount,
 } from 'vue';
-import { ElMessageBox, ElMessage } from 'element-plus';
-
+import { useStore } from 'vuex';
 import { userInfoGet, userUpdate, userDelete } from '../../http/api';
+
+const store = useStore();
+
+const userType = computed(() => store.state.currentUser);
 
 onBeforeMount(() => {
   userGet();
+  if (userType.value === '1') {
+    options.splice(0, 1);
+  }
 });
 /* 用户信息模板 */
 const userInfo = reactive([
@@ -19,6 +26,27 @@ const userInfo = reactive([
 const userList = reactive({
   tableData: [
   ],
+});
+
+const rules = reactive({
+  username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' },
+    {
+      min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur',
+    }],
+  type: [{ required: true, message: '请选择身份', trigger: 'blur' }],
+  name: [{ required: true, message: '请输入您的姓名', trigger: 'blur' }],
+  email: [{ required: true, message: '请输入邮箱', trigger: 'blur' },
+    {
+      type: 'email',
+      message: '请输入正确的邮箱地址',
+      trigger: ['blur', 'change'],
+    }],
+  phone: [{ required: true, message: '请输入电话', trigger: 'blur' },
+    {
+      pattern: /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/,
+      message: '请输入正确的手机号码或者座机号',
+    }],
 });
 /* 搜索 */
 const search = ref('');
@@ -39,6 +67,7 @@ const handleEdit = (index, row) => {
 };
 
 const handleDelete = (row) => {
+  // eslint-disable-next-line no-undef
   ElMessageBox.confirm('此操作将永久删除该账号，是否继续？', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
@@ -46,6 +75,7 @@ const handleDelete = (row) => {
   }).then(() => {
     userDelete(row).then((res) => {
       if (res.status === 200) {
+        // eslint-disable-next-line no-undef
         ElMessage.success('删除成功');
       }
     });
@@ -61,21 +91,21 @@ const userGet = () => {
   });
 };
 /* 选择器的值 */
-const value = ref('');
+const value = ref('2');
 
 /* 账号权限可选列表 */
 const options = [
   {
     value: '0',
-    label: '0',
+    label: '燃气公司',
   },
   {
     value: '1',
-    label: '1',
+    label: '物业',
   },
   {
     value: '2',
-    label: '2',
+    label: '用户',
   },
 ];
 /* 选择器 value值改变时 改变权限 */
@@ -87,9 +117,14 @@ const updateData = () => {
   dialogVisible.value = false;
   userUpdate(userList.tableData[tableIndex.value]).then((res) => {
     if (res.status === 200) {
+      // eslint-disable-next-line no-undef
       ElMessage.success('更新成功');
     }
   });
+};
+const handleClose = () => {
+  dialogVisible.value = false;
+  userGet();
 };
 
 </script>
@@ -140,6 +175,16 @@ const updateData = () => {
                     <span> {{ scope.row.name }}</span>
                     </template>
                   </el-table-column>
+                  <el-table-column label="邮箱" width="250px">
+                  <template #default="scope">
+                    <span> {{ scope.row.email }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="电话" width="250px">
+                  <template #default="scope">
+                    <span> {{ scope.row.phone }}</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column>
                     <template #header>
         <el-input v-model="search" size="small" placeholder="Type to search" />
@@ -160,13 +205,14 @@ const updateData = () => {
                 width="40%"
                 :before-close="handleClose"
                 >
-                <el-form>
-                  <el-form-item>
-                    <span style="margin-right:30px;">账号</span>
-                    <el-input v-model="userList.tableData[tableIndex].username" type="text" style="width:210px;"/>
+                <el-form label-width="100px" :model='userList.tableData[tableIndex]' :rules="rules" ref="ruleFormRef" style="width: 350px;">
+                  <el-form-item label="账号" prop='username'>
+                    <el-input v-model="userList.tableData[tableIndex].username"  style="width:210px;"/>
                   </el-form-item>
-                  <el-form-item>
-                    <span style="margin-right:3px;">账号权限</span>
+                  <el-form-item label="密码" prop='password'>
+                    <el-input v-model="userList.tableData[tableIndex].password" style="width:210px;"/>
+                  </el-form-item>
+                  <el-form-item label="账号权限" prop="type">
                       <el-select v-model="value" placeholder="Select" size="small" @change="typeChange">
                       <el-option
                       v-for="item in options"
@@ -177,22 +223,19 @@ const updateData = () => {
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item>
-                    <span style="margin-right:30px;">姓名</span>
-                    <el-input v-model="userList.tableData[tableIndex].name" type="text" style="width:210px;"/>
+                  <el-form-item label="姓名" prop="name">
+                    <el-input v-model="userList.tableData[tableIndex].name"  style="width:210px;"/>
                   </el-form-item>
-                  <el-form-item>
-                    <span style="margin-right:30px;">邮箱</span>
-                    <el-input v-model="userList.tableData[tableIndex].email" type="text" style="width:210px;"/>
+                  <el-form-item  label="邮箱" prop="email">
+                    <el-input v-model="userList.tableData[tableIndex].email"  style="width:210px;"/>
                   </el-form-item>
-                  <el-form-item>
-                    <span style="margin-right:30px;">电话</span>
-                    <el-input v-model="userList.tableData[tableIndex].phone" type="text" style="width:210px;"/>
+                  <el-form-item label="电话" prop="phone">
+                    <el-input v-model="userList.tableData[tableIndex].phone"  style="width:210px;"/>
                   </el-form-item>
                 </el-form>
                 <template #footer>
                   <span class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取消</el-button>
+                    <el-button @click="handleClose">取消</el-button>
                     <el-button type="primary" @click="updateData">确认</el-button>
                   </span>
               </template>
@@ -313,36 +356,6 @@ const updateData = () => {
 }
 .user-list-box::-webkit-scrollbar-track {
   background-color: transparent;
-}
-.el-overlay{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.el-icon{
-  height: 1.4em;
-  padding-inline: 5px;
-}
-.el-message-box{
-  width: 300px;
-  height: 130px;
-  border-radius: 5px;
-  background: #ffff;
-  color: #db984c;
-}
-.el-message-box__headerbtn{
-  display: none;
-}
-.el-message-box__container{
-  display: flex;
-  padding-block: 30px;
-}
-.el-message-box__btns{
-  position: relative;
-  left: 90px;
-}
-.el-message-box__message{
-  margin: 0 auto;
 }
 
 </style>

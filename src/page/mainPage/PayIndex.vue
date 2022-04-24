@@ -3,7 +3,6 @@ import { useRoute, useRouter } from 'vue-router';
 import { ref, onMounted, computed } from 'vue';
 /* import QRCode from 'qrcode'; */
 import QrcodeVue from 'qrcode.vue';
-import { ElMessage } from 'element-plus';
 import { baseURL } from '../../utils/baseUrl';
 import { cardQuery } from '../../http/api';
 
@@ -35,7 +34,9 @@ const payNow = () => {
   if (payData.value.state !== 'first') {
     intTimer.value = setInterval(() => {
       cardQuery({ cardId: payData.value.cardid, name: '' }).then((res) => {
+        console.log('yanghagn ', res);
         if (balance.value !== Number(res.data[0].balance.$numberDecimal)) {
+          console.log(1);
           closeDia();
         }
       });
@@ -43,7 +44,7 @@ const payNow = () => {
   } else {
     intTimer.value = setInterval(() => {
       cardQuery({ cardId: payData.value.cardid, name: '' }).then((res) => {
-        if (res) {
+        if (res.data.length !== 0) {
           closeDia();
         }
       });
@@ -54,6 +55,7 @@ const payNow = () => {
 const closeDia = () => {
   diableShow.value = false;
   clearInterval(intTimer.value);
+  // eslint-disable-next-line no-undef
   ElMessage.success('缴费成功');
   setTimeout(() => {
     router.go(-1);
@@ -109,19 +111,6 @@ const closeDia = () => {
 </template>
 
 <style>
-.el-message{
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 50%;
-  left: 50%;
-  width: 120px;
-  height: 35px;
-  border-radius: 5px;
-  background: #ffff;
-  color: #51ff01;
-}
 .computer-body{
   width: 80%;
   margin: 0 auto;

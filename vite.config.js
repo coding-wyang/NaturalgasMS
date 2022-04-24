@@ -5,7 +5,7 @@ import Components from 'unplugin-vue-components/vite';
 import viteCompression from 'vite-plugin-compression';
 import viteSvgIcons from 'vite-plugin-svg-icons';
 import path, { resolve } from 'path';
-import { ElementPlusResolver, AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import eslintPlugin from 'vite-plugin-eslint';
 import { viteMockServe } from 'vite-plugin-mock';
 import { baseURL } from './src/utils/baseUrl';
@@ -17,7 +17,8 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     Components({
-      resolvers: [ElementPlusResolver(), AntDesignVueResolver()],
+      resolvers:
+      [ElementPlusResolver()],
     }),
     viteCompression(),
     viteSvgIcons({

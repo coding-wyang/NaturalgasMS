@@ -1,5 +1,5 @@
 <script setup>
-import { ElMessage } from 'element-plus';
+
 import { reactive, ref } from 'vue';
 import { gasTypeAdd } from '../../http/api';
 
@@ -31,10 +31,12 @@ const addGas = (val) => {
       gasTypeAdd(addCardForm).then((res) => {
         console.log('11', res);
         if (res.status === 200) {
+          // eslint-disable-next-line no-undef
           ElMessage.success('添加成功');
         }
       });
     } else {
+      // eslint-disable-next-line no-undef
       ElMessage.error('数据有误');
     }
   });
@@ -66,17 +68,5 @@ const addGas = (val) => {
 </template>
 
 <style lang="scss">
-.el-message{
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 50%;
-  left: 50%;
-  width: 120px;
-  height: 35px;
-  border-radius: 5px;
-  background: #ffff;
-  color: #b2cf87;
-}
+
 </style>
