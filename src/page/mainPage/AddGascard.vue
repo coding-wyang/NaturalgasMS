@@ -1,8 +1,10 @@
 <script setup>
-import { ElMessage } from 'element-plus';
+/* import { ElMessage } from 'element-plus'; */
 import { reactive, ref } from 'vue';
-import { cardAdd } from '../../http/api';
+import { useRouter } from 'vue-router';
+/* import { cardAdd } from '../../http/api'; */
 
+const router = useRouter();
 const addCardForm = reactive({
   name: '',
   cardId: '',
@@ -35,6 +37,20 @@ const addCard = (val) => {
   if (!val) return;
   val.validate((valid) => {
     if (valid) {
+      router.push({
+        path: 'PayIndex',
+        query: {
+          payment: addCardForm.balance,
+          cardid: addCardForm.cardId,
+          state: 'first',
+          firstInfo: JSON.stringify({
+            username: addCardForm.username,
+            name: addCardForm.name,
+          }),
+        },
+      });
+    }
+    /* if (valid) {
       cardAdd(addCardForm).then((res) => {
         console.log('11', res);
         if (res.status === 200) {
@@ -43,7 +59,7 @@ const addCard = (val) => {
       });
     } else {
       ElMessage.error('数据有误');
-    }
+    } */
   });
 };
 
@@ -53,6 +69,7 @@ const addCard = (val) => {
   <el-card>
     <div class="add-card">
       <h4>添加气卡</h4>
+      <el-divider><svg-icon name='star'/></el-divider>
       <el-form label-width="100px" :model="addCardForm" :rules="rules" ref="ruleFormRef" style="width: 350px;">
           <el-form-item label="户主" prop="name" >
             <el-input v-model="addCardForm.name" />
@@ -67,7 +84,7 @@ const addCard = (val) => {
             <el-input v-model="addCardForm.username"/>
           </el-form-item>
           <div class="login-button">
-            <el-button  type="primary" style="width:150px;" @click="addCard(ruleFormRef)">新建并缴费</el-button>
+            <el-button  type="primary" style="width:150px;margin-left:100px;" @click="addCard(ruleFormRef)">新建并缴费</el-button>
           </div>
         </el-form>
         </div>
@@ -75,17 +92,5 @@ const addCard = (val) => {
 </template>
 
 <style lang="scss">
-.el-message{
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 50%;
-  left: 50%;
-  width: 120px;
-  height: 35px;
-  border-radius: 5px;
-  background: #ffff;
-  color: #b2cf87;
-}
+
 </style>

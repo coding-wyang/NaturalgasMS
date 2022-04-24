@@ -59,7 +59,7 @@ const getCardinfo = () => {
       </div>
       <div class="gascardinfo">
     <h5>气卡信息预览</h5>
-    <el-divider style="margin-block: 10px;"></el-divider>
+    <el-divider style="margin-block: 10px;"><svg-icon name='star'/></el-divider>
     <div class="info-box">
       <div class="info" v-for="(item) in cardInfo.data" :key='item.index' >
         <svg-icon class="info-icon" name="user"/>

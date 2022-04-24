@@ -56,4 +56,26 @@ export const readRecordGetAll = () => http.get('/meterread/getall');
 
 export const readRecordGet = (data) => http.get('/meterread/get', { data });
 
+export const cardGetById = (data) => http.get('/gascard/get/id', { data });
+
+export const payRead = (data) => http.get('/pay/read', { data });
+
+export const payRecordQuery = (data) => http.get('/pay/read/query', { data });
+
+export const gasTypeAdd = (data) => http.get('/gastype/add', { data });
+
+export const gastypeGetAll = () => http.get('/gastype/getall');
+
+export const gasmeterAdd = (data) => http.get('/gasmeter/add', { data });
+
+export const meterDelete = (data) => http.get('/gasmeter/delete', { data });
+
+export const gasUpdate = (data) => http.get('/gastype/update', { data });
+
+export const gastypeDelete = (data) => http.get('/gastype/delete', { data });
+
+export const userRe = (data) => http.get('/user/re', { data });
+
+export const userInfoGetById = (data) => http.get('/user/info/get', { data });
+
 export const gasGet = () => fetch('/api/gasGet');

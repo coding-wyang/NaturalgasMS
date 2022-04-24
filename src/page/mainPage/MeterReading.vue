@@ -88,7 +88,13 @@ const handleRead = () => {
     meterid: id.value,
     cumulative: lastCumulative.value + diff.value,
   }).then((res) => {
-    console.log('ssssasasas:::', res);
+    if (res.status === 200) {
+      // eslint-disable-next-line no-undef
+      ElMessage.success('抄表成功');
+    } else if (res.status === 304) {
+      // eslint-disable-next-line no-undef
+      ElMessage.warning('请勿重复抄表');
+    }
   });
 };
 </script>
@@ -97,7 +103,7 @@ const handleRead = () => {
   <el-card>
     <div>
       <h5>抄表</h5>
-      <el-divider/>
+      <el-divider><svg-icon name='star'/></el-divider>
       <div v-if='!queryVisible'>暂无数据！请先在管理页面选择需要抄录的表</div>
       <div class='meter-box' v-if='queryVisible'>
         <p>气表ID: {{id}}</p>
@@ -124,7 +130,7 @@ const handleRead = () => {
   </el-card>
 </template>
 
-<style scoped>
+<style >
 .meter-box>p{
   font-weight: 550;
   margin-block: 10px;
