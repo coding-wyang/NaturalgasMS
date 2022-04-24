@@ -11,18 +11,18 @@ const store = useStore();
 const router = useRouter();
 const editableTabsValue = ref('0');// 控制tab高亮显示
 const editableTabs = ref([
-  { title: '监测信息', name: '0' },
+  { title: '个人信息', name: '0' },
 ]);// tab列表 初始默认值为监测信息
 let tabIndex = 0;
-const showTab = ref('监测信息'); // 控制main页面显示tab对应的内容
+const showTab = ref('个人信息'); // 控制main页面显示tab对应的内容
 const userType = computed(() => store.state.currentUser);
 const name = computed(() => store.state.name);
 const sessionType = sessionStorage.getItem('userType');
-if (userType.value === '2' || sessionType === '2') {
+/* if (userType.value === '2' || sessionType === '2') {
   console.log('res', 1);
   editableTabs.value = [{ title: '个人信息', name: '0' }];
   showTab.value = '个人信息';
-}
+} */
 
 const users = reactive(['燃气公司', '物业', '用户']);
 const imgUrl = reactive(['https://avatars.githubusercontent.com/u/63920399?s=200&v=4', 'https://avatars.githubusercontent.com/u/29560987?v=4', 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png']);
@@ -59,7 +59,7 @@ const asideList = ref(
     /* 管理员 */
     managerList:
   [
-    '监测信息',
+    '个人信息',
     '用户管理',
     '气表管理',
     '缴费管理',
@@ -158,10 +158,18 @@ const outLogin = () => {
           <!-- 管理员侧边栏 -->
           <ul class="ul-box" v-if="userType ==='0' || userType === '1'">
             <li>
-              <div class="icon-monito" @click='addTableTab(asideList.managerList[0], routerList.managerList.monitor)'>
+              <el-dropdown @command="handleCommand($event)" placement="bottom-end" size="small">
+              <div class="icon-monito" @click='addTableTab(asideList.managerList[0])'>
                 <svg-icon class="aside-icon" name="monitor"/>
               </div>
-                <p>监测信息</p>
+              <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command='个人信息'>个人信息</el-dropdown-item>
+                    <el-dropdown-item command='监测信息'>监测信息</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+              <p>个人信息</p>
             </li>
             <li>
               <el-dropdown @command="handleCommand($event)" placement="bottom-end" size="small">
@@ -398,7 +406,6 @@ body{
   padding-block-start: 10px;
   color: aliceblue;
   height: 20px;
-
   font-size: 14px;
 }
 .header-title{
@@ -411,7 +418,9 @@ body{
   box-shadow: 5px 5px 6px #ccc ;
 }
 .header-title>h3{
+  position: relative;
   padding-top: 6px;
+  z-index: 2;
 }
 .avatar-box-style{
   display: flex;
@@ -420,10 +429,12 @@ body{
   align-items: center;
   right: 4%;
   top: 10px;
+  z-index: 1;
 }
 .avatar-box-style>:nth-child(1){
   font-size: 15px;
   margin-inline-end: 20px;
+
 }
 .avatar-box-style>:nth-child(2){
   transform: scale(0.5);

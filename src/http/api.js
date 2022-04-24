@@ -75,4 +75,7 @@ export const gasUpdate = (data) => http.get('/gastype/update', { data });
 export const gastypeDelete = (data) => http.get('/gastype/delete', { data });
 
 export const userRe = (data) => http.get('/user/re', { data });
+
+export const userInfoGetById = (data) => http.get('/user/info/get', { data });
+
 export const gasGet = () => fetch('/api/gasGet');

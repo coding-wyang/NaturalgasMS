@@ -6,10 +6,14 @@ import { gastypeGetAll, gasUpdate, gastypeDelete } from '../../http/api';
 
 const tableData = ref();
 onMounted(() => {
+  getGastype();
+});
+
+const getGastype = () => {
   gastypeGetAll().then((res) => {
     tableData.value = res.slice(0, 6);
   });
-});
+};
 const gasid = ref();
 const fliterData = () => {
   tableData.value.forEach((e) => {
@@ -25,6 +29,7 @@ const handleOk = () => {
     if (res.status === 200) {
       // eslint-disable-next-line no-undef
       ElMessage.success('更新成功');
+      getGastype();
     } else {
       // eslint-disable-next-line no-undef
       ElMessage.error('更新失败');
@@ -84,7 +89,7 @@ const deletePrice = (id) => {
         >
       </el-form-item>
     </el-form>
-    <el-divider />
+    <el-divider><svg-icon name='star'/></el-divider>
     <div class="gas-ma-box">
       <div
         v-for="item in tableData"

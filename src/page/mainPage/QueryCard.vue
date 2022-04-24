@@ -89,7 +89,7 @@ const handlePay = () => {
       <el-button type="primary" @click="onSubmit">Query</el-button>
     </el-form-item>
   </el-form>
-  <el-divider></el-divider>
+  <el-divider><svg-icon name='star'/></el-divider>
   <h4 style="padding-block-end: 15px;">气卡查询结果</h4>
   <div class="search-card">
     <div v-show="cardData.data[0].name !== undefined" v-for="(item, index) in cardData.data" :key=item.cardid>

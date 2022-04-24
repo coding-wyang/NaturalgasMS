@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { loginGet, userRe } from '../http/api';
@@ -70,14 +70,40 @@ const reGister = () => {
   isShow.value = false;
 };
 
-const agreeRe = () => {
-  userRe(registerForm).then((res) => {
-    if (res.status === 200) {
-      isShow.value = true;
+const agreeRe = (val) => {
+  if (!val) {
+    // eslint-disable-next-line no-undef
+    ElMessage.error('数据有误');
+    return;
+  }
+  val.validate((valid) => {
+    if (valid) {
+      userRe(registerForm).then((res) => {
+        if (res.status === 200) {
+          isShow.value = true;
+          // eslint-disable-next-line no-undef
+          ElMessage.success('注册成功，现返回登陆页');
+        }
+      });
+    } else {
       // eslint-disable-next-line no-undef
-      ElMessage.success('注册成功，现返回登陆页');
+      ElMessage.error('数据有误');
     }
   });
+};
+
+const iconName = ref('close-eye');
+
+const pwdType = ref('password');
+watch(() => pwdType.value, (val) => {
+  if (val === 'password') {
+    iconName.value = 'close-eye';
+  } else if (val === 'text') {
+    iconName.value = 'eye';
+  }
+});
+const activeIcon = () => {
+  pwdType.value = pwdType.value === 'password' ? 'text' : 'password';
 };
 </script>
 
@@ -98,7 +124,8 @@ const agreeRe = () => {
             <el-input v-model="loginForm.user" />
           </el-form-item>
           <el-form-item label="密码" prop="pass" >
-            <el-input v-model="loginForm.pass"/>
+            <el-input v-model="loginForm.pass" :type="pwdType" />
+            <div @click='activeIcon' class='icon-activeeye'><svg-icon :name='iconName'/></div>
           </el-form-item>
           <div class="login-button">
             <el-button  type="primary" style="width:120px" @click="getLogin">登录</el-button>
@@ -122,7 +149,7 @@ const agreeRe = () => {
             <el-input v-model="registerForm.phone"/>
           </el-form-item>
           <div class="login-button">
-            <el-button  type="primary" style="width:120px" @click="agreeRe">注册</el-button>
+            <el-button  type="primary" style="width:120px" @click="agreeRe(ruleFormRef)">注册</el-button>
             <el-button  type="primary" style="width:120px" @click="isShow =true">取消</el-button>
           </div>
         </el-form>
@@ -162,6 +189,12 @@ const agreeRe = () => {
   display: flex;
   text-align: center;
   padding-block-start: 10px;
+}
+
+.icon-activeeye{
+  position: relative;
+  left: 170px;
+  top: -32px;
 }
 
 </style>

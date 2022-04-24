@@ -52,7 +52,7 @@ const addMeter = (val) => {
   <el-card>
     <div class="add-card">
       <h4>添加气表</h4>
-      <el-divider/>
+      <el-divider><svg-icon name='star'/></el-divider>
       <el-form label-width="100px" :model="addMeterForm" :rules="rules" ref="ruleFormRef" style="width: 350px;">
           <el-form-item label="绑定卡号" prop="cardId" >
             <el-input v-model="addMeterForm.cardId" />

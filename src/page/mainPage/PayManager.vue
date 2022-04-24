@@ -62,6 +62,10 @@ const line = () => {
         color: '#333', // 主标题文字颜色
       },
     },
+    tooltip: {
+      trigger: 'axis',
+      confine: true,
+    },
     xAxis: {
       type: 'category',
       data: monthData,
@@ -121,7 +125,7 @@ const pie = () => {
 <template>
   <el-card>
     <h5>用户：{{name}}</h5>
-    <el-divider/>
+    <el-divider><svg-icon name='star'/></el-divider>
     <div class="pay-box">
       <div class="left-top-box">
         <h6>缴费分布</h6>
@@ -129,7 +133,7 @@ const pie = () => {
       </div>
       <div class='bottom-box'>
         <h6>缴费趋势</h6>
-        <el-divider/>
+        <el-divider><svg-icon name='star'/></el-divider>
         <div id='qushiLine' :style="{ width: '100%', height: '300px' }"></div>
       </div>
     </div>

@@ -69,6 +69,7 @@ const addCard = (val) => {
   <el-card>
     <div class="add-card">
       <h4>添加气卡</h4>
+      <el-divider><svg-icon name='star'/></el-divider>
       <el-form label-width="100px" :model="addCardForm" :rules="rules" ref="ruleFormRef" style="width: 350px;">
           <el-form-item label="户主" prop="name" >
             <el-input v-model="addCardForm.name" />

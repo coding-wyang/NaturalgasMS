@@ -87,6 +87,7 @@ const changeYear = (val) => {
 <template>
   <el-card>
       <h5>气表ID: {{id}}</h5>
+      <el-divider><svg-icon name='star'/></el-divider>
       <div class="block">
         <el-date-picker
           v-model="value"

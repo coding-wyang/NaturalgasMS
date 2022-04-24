@@ -29,7 +29,7 @@ const toEchart = (row) => {
   <el-card>
     <div>
       <h5>抄表记录</h5>
-      <el-divider/>
+      <el-divider><svg-icon name='star'/></el-divider>
       <div class='table-style'>
         <el-table :data="filterTableData" @cell-click="toEchart" style="width: 100%; background-color: rgb(248, 248, 248);">
           <el-table-column label="气表ID" width="180">

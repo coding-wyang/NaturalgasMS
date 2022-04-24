@@ -33,10 +33,10 @@ const routes = [
         path: '',
         name: 'First',
         meta: {
-          title: '监测信息',
+          title: '个人信息',
           keepAlive: true,
         },
-        component: () => import('../page/mainPage/MonitorInfo.vue'),
+        component: () => import('../page/mainPage/UserInfo.vue'),
       },
       {
         path: 'UserInfo',
@@ -207,9 +207,6 @@ export const dynamicRouter = [
 router.beforeEach((to, from, next) => {
   const isLogin = sessionStorage.getItem('userToken');
   const role = sessionStorage.getItem('userType');
-  if (to.name === 'First' && role === '2') {
-    return next({ name: 'UserInfo' });
-  }
   if (to.path === '/PaySucess') return next();
   if (to.path === '/PayPhone') return next();
   if (to.path === '/Login') return next();

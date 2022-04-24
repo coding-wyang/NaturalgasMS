@@ -91,7 +91,7 @@ const addUser = (val) => {
   <el-card>
     <div class="add-user">
       <h4>添加用户</h4>
-      <el-divider></el-divider>
+      <el-divider><svg-icon name='star'/></el-divider>
       <el-form label-width="90px" :model="addForm" :rules="rules" ref="ruleFormRef"  style="width: 250px;">
           <el-form-item label="账号" prop="user" >
             <el-input v-model="addForm.user" />

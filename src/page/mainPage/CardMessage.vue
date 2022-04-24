@@ -66,7 +66,7 @@ const pie = () => {
 <template>
   <el-card>
     <h5>用户：{{name}}</h5>
-    <el-divider></el-divider>
+    <el-divider><svg-icon name='star'/></el-divider>
     <div class="card-top-box">
         <div id='fenbuBing' :style="{ width: '100%', height: '300px' }"></div>
       </div>

@@ -103,7 +103,7 @@ const handleRead = () => {
   <el-card>
     <div>
       <h5>抄表</h5>
-      <el-divider/>
+      <el-divider><svg-icon name='star'/></el-divider>
       <div v-if='!queryVisible'>暂无数据！请先在管理页面选择需要抄录的表</div>
       <div class='meter-box' v-if='queryVisible'>
         <p>气表ID: {{id}}</p>

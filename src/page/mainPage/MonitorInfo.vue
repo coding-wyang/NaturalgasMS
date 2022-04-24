@@ -58,7 +58,7 @@ const iconSave = reactive([
   <el-card>
     <div class="monitor-box">
     <h5>燃气质量</h5>
-    <el-divider style="margin-block: 10px;"></el-divider>
+    <el-divider style="margin-block: 10px;"><svg-icon name='star'/></el-divider>
     <div class="cardinfo-box">
       <div class="cardinfo" v-for="(item, index) in gasInfo" :key='item.index' >
         <svg-icon class="card-icon" :name="iconSave[index]"/>

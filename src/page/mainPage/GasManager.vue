@@ -88,14 +88,14 @@ const deleteMeter = (id) => {
     <div class="gas-colco">
       <div class="meter-header-box">
       <h5>设备总览</h5>
-      <el-form style="margin-left:20px; margin-top:-5px;">
+      <el-form style="margin-left:20px; margin-top:12px;">
         <el-form-item>
           <el-input v-model='meterid' style="width: 300px" placeholder="请输入气表ID"></el-input>
         <el-button @click="fliterData" style="width:70px;background: #87a0cf; color: #ffff; margin-left:10px;">查询</el-button>
         </el-form-item>
       </el-form>
       </div>
-      <el-divider style="margin-top:0px;"></el-divider>
+      <el-divider style="margin-top:0px;"><svg-icon name='star'/></el-divider>
       <div class='gas-box' >
         <div class="gas-child-box" v-for="item in meterAllList.data" :key='item._id'>
           <svg-icon class="gas-icon" name="user"/>

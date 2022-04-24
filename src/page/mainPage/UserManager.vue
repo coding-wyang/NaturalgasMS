@@ -155,7 +155,7 @@ const handleClose = () => {
       </div>
       <div class="user-list-box">
         <h4>账号查询</h4>
-        <el-divider/>
+        <el-divider><svg-icon name='star'/></el-divider>
         <el-table :data="filterTableData" style="width: 100%; background-color: rgb(248, 248, 248);">
           <el-table-column label="账号" width="250px">
             <template #default="scope">

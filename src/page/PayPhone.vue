@@ -20,7 +20,8 @@ const successPay = () => {
     };
     cardAdd(addForm).then((res) => {
       if (res.status !== 200) {
-        alert('error');
+        // eslint-disable-next-line no-undef
+        ElMessage.error('添加失败');
       }
     });
   }
