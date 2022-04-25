@@ -45,6 +45,7 @@ const routerList = ref({
     燃气管理: 'GasPrice',
     添加燃气: 'AddGas',
     气表信息: 'Gas',
+    缴费记录: 'PayRecord',
   },
 
 });
@@ -202,9 +203,17 @@ const outLogin = () => {
               <p>气表管理</p>
             </li>
             <li>
+              <el-dropdown @command="handleCommand($event)" placement="bottom-end" size="small">
               <div class="icon-pay" @click='addTableTab(asideList.managerList[3])'>
                 <svg-icon class="aside-icon" name="diamond"/>
-              </div >
+              </div>
+              <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command='缴费管理'>缴费管理</el-dropdown-item>
+                    <el-dropdown-item command='缴费记录'>缴费记录</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
               <p>缴费管理</p>
             </li>
             <li>
@@ -246,9 +255,17 @@ const outLogin = () => {
               <p>个人信息</p>
             </li>
             <li>
-                <div class="icon-pay" @click='addTableTab(asideList.userList[1])'>
-                  <svg-icon class="aside-icon" name="diamond"/>
-                </div >
+              <el-dropdown @command="handleCommand($event)" placement="bottom-end" size="small">
+              <div class="icon-pay" @click='addTableTab(userList.managerList[1])'>
+                <svg-icon class="aside-icon" name="diamond"/>
+              </div>
+              <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command='缴费业务'>缴费业务</el-dropdown-item>
+                    <el-dropdown-item command='缴费记录'>缴费记录</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
               <p>缴费业务</p>
             </li>
             <li>

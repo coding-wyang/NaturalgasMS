@@ -2,15 +2,22 @@
 import * as echarts from 'echarts';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { readRecordGet } from '../../http/api';
+import { readRecordGet, payRecordQuery } from '../../http/api';
 
 const route = useRoute();
 const id = ref();
 const value = ref('2022');
+const curDate = new Date();
+const showType = ref('');
 onMounted(() => {
-  id.value = route.query.id;
-  if (id.value) {
+  if (route.query.id) {
+    showType.value = 'meter';
+    id.value = route.query.id;
     getReadRecord(value.value);
+  } else if (route.query.name) {
+    showType.value = 'pay';
+    id.value = route.query.name;
+    getPayRecord(String(curDate.getFullYear()));
   }
   // 这里是由于图表渲染快于父元素导致图表比例溢出，做的一个延缓操作
   setTimeout(() => {
@@ -19,6 +26,27 @@ onMounted(() => {
 });
 
 const chartData = ref();
+const getPayRecord = (val) => {
+  console.log('val', val);
+  payRecordQuery({ name: id.value }).then((res) => {
+    console.log('res', res);
+    const save = res.reduce((p, q) => {
+      if (q.timer.slice(0, 4) === val) {
+        const arr = q.timer.split('-');
+        const index = arr[1];
+        let newvalue = 0;
+        newvalue = p.has(index) ? p.get(index) + q.payment : q.payment;
+        p.set(index, newvalue);
+      }
+      return p;
+    }, new Map());
+    console.log(save);
+    // eslint-disable-next-line no-shadow
+    const obj = Array.from(save).reduce((obj, [key, value]) => Object.assign(obj, { [key]: value }), {});
+    chartData.value = obj;
+    console.log('chartData.value', chartData.value, save);
+  });
+};
 const getReadRecord = (val) => {
   readRecordGet({
     data: {
@@ -39,8 +67,7 @@ const line = () => {
   const myChart = echarts.init(document.getElementById('readEcharts'));
   myChart.setOption({
     title: {
-      text: '图: 抄表统计/月',
-      x: 'center',
+      text: '统计/月',
       textStyle: {
         fontSize: 14,
         fontWeight: 'bolder',
@@ -75,8 +102,12 @@ const line = () => {
 };
 
 const changeYear = (val) => {
-  console.log('sadfaef', typeof String(val.getFullYear()));
-  getReadRecord(String(val.getFullYear()));
+  if (route.query.id) {
+    getReadRecord(String(val.getFullYear()));
+  } else if (route.query.name) {
+    console.log('str', String(val.getFullYear()));
+    getPayRecord(String(val.getFullYear()));
+  }
   setTimeout(() => {
     line();
   }, 100);
@@ -86,7 +117,8 @@ const changeYear = (val) => {
 
 <template>
   <el-card>
-      <h5>气表ID: {{id}}</h5>
+      <h5 v-if="showType==='meter'">气表使用记录 ID: {{id}}</h5>
+      <h5 v-if="showType==='pay'">个人气卡缴费: {{id}}</h5>
       <el-divider><svg-icon name='star'/></el-divider>
       <div class="block">
         <el-date-picker

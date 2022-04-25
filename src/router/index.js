@@ -102,6 +102,15 @@ const routes = [
         component: () => import('../page/mainPage/PayManager.vue'),
       },
       {
+        path: 'PayRecord',
+        name: 'PayRecord',
+        meta: {
+          title: '缴费记录',
+          keepAlive: true,
+        },
+        component: () => import('../page/mainPage/PayRecord.vue'),
+      },
+      {
         path: 'Card',
         name: 'Card',
         meta: {
@@ -191,7 +200,6 @@ const routes = [
         },
         component: () => import('../page/mainPage/PayIndex.vue'),
       },
-
     ],
   },
 ];

@@ -78,4 +78,7 @@ export const userRe = (data) => http.get('/user/re', { data });
 
 export const userInfoGetById = (data) => http.get('/user/info/get', { data });
 
+export const payRecordGetALL = () => http.get('/pay/read/getall');
+
+export const payRepassPost = (data) => http.get('/pay/read/postre', { data });
 export const gasGet = () => fetch('/api/gasGet');
